@@ -1,23 +1,40 @@
 String.prototype.replaceAll = function(replaceThis, withThis){
-	toreturn = this.toString();
-	while (toreturn.indexOf(replaceThis) > 0){
+	var toreturn = this.toString();
+	while (toreturn.indexOf(replaceThis) >= 0){
 		toreturn = toreturn.replace(replaceThis, withThis);
 	}
 	return toreturn;
 };
 
-function Room(roomname, introtext, roompic){
+function Room(roomname, introtext, roompic, aliases){
 	this.parents = [];
-	this.children = new Array();
-	this.items = new Array();
-	this.commands = ["cd", "ls", "less", "man", "help", "exit", "pwd"];
-	this.room_name = (typeof roomname === 'undefined') ? "Generic Room": roomname;
+	this.children = [];
+	this.items = [];
+	this.aliases = Array.isArray(aliases) ? aliases : [];
+	this.commands = ["cd", "ls", "less", "cat", "man", "help", "ajuda", "exit", "pwd"];
+	this.room_name = (typeof roomname === 'undefined') ? "Sala Genèrica": roomname;
 	this.room_pic = (typeof roompic === 'undefined') ? "./static/img/none.gif": "./static/img/" + roompic;
-	this.intro_text = (typeof introtext === 'undefined') ? "This is a simple room": introtext;
-	this.cmd_text = {"pwd": "You are in " + this.room_name + "."};
-	//for event handling
+	this.intro_text = (typeof introtext === 'undefined') ? "Aquesta és una sala tranquil·la.": introtext;
+	this.cmd_text = {"pwd": "Ets a " + this.room_name + "."};
+	// for event handling
 	this.ev = new EventTarget();
 	EventTarget.call(this);
+};
+
+Room.prototype.addAlias = function(alias) {
+	if (this.aliases.indexOf(alias) === -1) {
+		this.aliases.push(alias);
+	}
+};
+
+Room.prototype.matches = function(name) {
+	if (!name) return false;
+	var cleanName = name.trim();
+	if (this.room_name.toLowerCase() === cleanName.toLowerCase()) return true;
+	for (var i = 0; i < this.aliases.length; i++) {
+		if (this.aliases[i].toLowerCase() === cleanName.toLowerCase()) return true;
+	}
+	return false;
 };
 
 Room.prototype.toString = function(){
@@ -29,68 +46,81 @@ Room.prototype.changeIntroText = function(new_text){
 };
 
 Room.prototype.addItem = function(newitem) {
-	if (typeof newitem != 'undefined'){
-		this.items[this.items.length] = newitem;
+	if (typeof newitem !== 'undefined'){
+		this.items.push(newitem);
 	}
 };
 
 Room.prototype.removeItem = function(itemnametoremove){
-	index = this.itemStringArray().indexOf(itemnametoremove);
-	if (index != -1){
-		return this.items.splice(index, 1)[0];
+	var item = this.getItemFromName(itemnametoremove);
+	if (item !== -1){
+		var index = this.items.indexOf(item);
+		if (index !== -1) {
+			return this.items.splice(index, 1)[0];
+		}
 	}
 	return null;
 };
 
-Room.prototype.itemStringArray = function(item){
-	itemstrarray = []
+Room.prototype.itemStringArray = function(){
+	var itemstrarray = [];
 	for (var i = 0; i < this.items.length; i++){
-		itemstrarray[itemstrarray.length] = this.items[i].toString();
+		itemstrarray.push(this.items[i].toString());
 	}
 	return itemstrarray;
 };
 
-Room.prototype.childStringArray = function(child){
-	childstrarray = []
+Room.prototype.childStringArray = function(){
+	var childstrarray = [];
 	for (var i = 0; i < this.children.length; i++){
-		childstrarray[childstrarray.length] = this.children[i].toString();
+		childstrarray.push(this.children[i].toString());
 	}
 	return childstrarray;
 };
 
 Room.prototype.getItemFromName = function(itemname){
-	itemindex = this.itemStringArray().indexOf(itemname);
-	if (itemindex > -1)
-		return this.items[itemindex];
+	if (!itemname) return -1;
+	for (var i = 0; i < this.items.length; i++) {
+		if (typeof this.items[i].matches === 'function') {
+			if (this.items[i].matches(itemname)) {
+				return this.items[i];
+			}
+		} else if (this.items[i].toString().toLowerCase() === itemname.trim().toLowerCase()) {
+			return this.items[i];
+		}
+	}
 	return -1;
-}
+};
 
 Room.prototype.getChildFromName = function(childname){
-	childindex = this.childStringArray().indexOf(childname);
-	if (childindex > -1)
-		return this.children[childindex];
+	if (!childname) return -1;
+	for (var i = 0; i < this.children.length; i++) {
+		if (typeof this.children[i].matches === 'function') {
+			if (this.children[i].matches(childname)) {
+				return this.children[i];
+			}
+		} else if (this.children[i].toString().toLowerCase() === childname.trim().toLowerCase()) {
+			return this.children[i];
+		}
+	}
 	return -1;
-}
+};
 
 Room.prototype.addChild = function(newchild){
-	if (typeof newchild != 'undefined'){
-		this.children[this.children.length] = newchild;
+	if (typeof newchild !== 'undefined' && this.children.indexOf(newchild) === -1){
+		this.children.push(newchild);
 	}
 };
 
 Room.prototype.removeChild = function(child){
-	index = this.children.indexOf(child);
-	if (index != -1){
+	var index = this.children.indexOf(child);
+	if (index !== -1){
 		this.children.splice(index, 1);
 	}
 };
 
-Room.prototype.childrenStringArray = function(child){
-	childrenstrarray = []
-	for (var i = 0; i < this.children.length; i++){
-		childrenstrarray[childrenstrarray.length] = this.children[i].toString();
-	}
-	return childrenstrarray;
+Room.prototype.childrenStringArray = function(){
+	return this.childStringArray();
 };
 
 Room.prototype.addParent = function(parent){
@@ -98,230 +128,247 @@ Room.prototype.addParent = function(parent){
 };
 
 Room.prototype.addCommand = function(cmd){
-	this.commands[this.commands.length] = cmd;
+	if (this.commands.indexOf(cmd) === -1) {
+		this.commands.push(cmd);
+	}
+	if (cmd === "less" && this.commands.indexOf("cat") === -1) {
+		this.commands.push("cat");
+	}
+	if (cmd === "help" && this.commands.indexOf("ajuda") === -1) {
+		this.commands.push("ajuda");
+	}
 };
 
 Room.prototype.removeCommand = function(cmd){
-	index = this.commands.indexOf(cmd);
-	if (index != -1){
+	var index = this.commands.indexOf(cmd);
+	if (index !== -1){
 		this.commands.splice(index, 1);
+	}
+	if (cmd === "less") {
+		var catIndex = this.commands.indexOf("cat");
+		if (catIndex !== -1) this.commands.splice(catIndex, 1);
+	}
+	if (cmd === "help") {
+		var ajudaIndex = this.commands.indexOf("ajuda");
+		if (ajudaIndex !== -1) this.commands.splice(ajudaIndex, 1);
 	}
 };
 
 Room.prototype.addCmdText = function(cmd, text) {
 	this.cmd_text[cmd] = text;
+	if (cmd === "less") {
+		this.cmd_text["cat"] = text;
+	} else if (cmd === "cat") {
+		this.cmd_text["less"] = text;
+	} else if (cmd === "help") {
+		this.cmd_text["ajuda"] = text;
+	} else if (cmd === "ajuda") {
+		this.cmd_text["help"] = text;
+	}
 };
 
 Room.prototype.removeCmdText = function(cmd){
 	delete this.cmd_text[cmd];
+	if (cmd === "less") delete this.cmd_text["cat"];
+	if (cmd === "help") delete this.cmd_text["ajuda"];
 };
 
 Room.prototype.ls = function(args){
-	if (args.length > 0){
-		if (this.childrenStringArray().indexOf(args[0]) > -1){
-			return this.children[this.childrenStringArray().indexOf(args[0])].printLS();
+	if (args && args.length > 0){
+		var targetChild = this.getChildFromName(args[0]);
+		if (targetChild !== -1){
+			return targetChild.printLS();
 		} else {
-			return "That is not a valid object to look at.";
+			return "Aquest no és un indret o sala vàlida per mirar.";
 		}
 	} else {
-		other_rooms = (this.children.toString()).replaceAll(",", "\n");
-		$("#scene").attr("src",this.room_pic); // Display image of room
-		if (this.items.length > 0){
-			return " Locations: \n" + other_rooms + "\n Items: \n" + (this.items.toString()).replaceAll(",", "\n");
-		}
-		return " Locations: \n" + other_rooms;
+		$("#scene").attr("src", this.room_pic); // Mostra la imatge de la sala
+		return this.printLS();
 	}
 };
 
 Room.prototype.printLS = function(){
-	other_rooms = (this.children.toString()).replaceAll(",", "\n");
-		if (this.items.length > 0){
-			return " Locations: \n" + other_rooms + "\n Items: \n" + (this.items.toString()).replaceAll(",", "\n");
-		}
-		return " Locations: \n" + other_rooms;
-}
+	var other_rooms = this.children.join("\n");
+	var output = "";
+	if (this.children.length > 0) {
+		output += " [Camins / Estances]:\n" + other_rooms;
+	} else {
+		output += " [Camins / Estances]: (cap sortida visible)";
+	}
+	if (this.items.length > 0){
+		output += "\n\n [Objectes i Personatges]:\n" + this.items.join("\n");
+	}
+	return output;
+};
 
 var enterRoom = function(new_room){
-    $("#scene").attr("src", "./static/img/none.gif"); //Always show blank image when moving into a room
- 	current_room = new_room;
-    state.setCurrentRoom(current_room);
-}
-
-Room.prototype.cd = function(args){
-	if (args.length > 1){
-		return "You can't move to multiple locations.";
-	} else if (args.length == 0){
-		enterRoom(Home);
-		return "You have come Home!";
-	}else if (args[0] === "..") {
-		if (this.parents.length >= 1){
-			if (this.room_name === "AthenaCluster"){
-				this.ev.fire("AthenaClusterExited");
-			}
-            enterRoom(this.parents[0]);
-			return "You have moved to " + current_room.toString() + ". " + current_room.intro_text;
-		} else {
-			return "You are at the first room.";
-		}
-	} else if (args[0] === "~"){
-		enterRoom(Home);
-		return "You have come Home!";
-	} else if (args[0] === ".") {
-        enterRoom(current_room);
-        $("#scene").attr("src", "./static/img/none.gif"); //Always show blank image when moving into a room
-		return "You have moved to " + current_room.toString() + ". " + current_room.intro_text;
-	// } else if (args[0].indexOf("/") > 0){
-	// 	var rooms_in_order = args[0].split("/");
-	// 	var cur_room_to_test = this;
-	// 	for (var i = 0; i < rooms_in_order.length; i++){
-	// 		cur_room_to_test = cur_room_to_test.can_cd(rooms_in_order[i]);
-	// 		if (cur_room_to_test === false){
-	// 			return "That is not reachable from here.";
-	// 		}
-	// 	}
-	// 	enterRoom(cur_room_to_test);
-	// 	return "You  have moved to " + cur_room_to_test.toString() + ". " + current_room.intro_text;
-	} else {
-		roomname = args[0];
-		for (var i = 0; i < this.children.length; i++){
-			if (roomname === this.children[i].toString()){
-				if (this.children[i].commands.indexOf("cd") > -1){
-	                enterRoom(this.children[i]);
-					return "You have moved to " + current_room.toString() + ". " + current_room.intro_text;
-				} else {
-					if (roomname === "AthenaCluster"){
-						this.ev.fire("tryEnterAthenaCluster");
-					} 
-					return this.children[i].cmd_text["cd"];
-				}
-			}
-		}
-		return "There is no room called " + args[0] + ".";
+	$("#scene").attr("src", "./static/img/none.gif");
+	current_room = new_room;
+	if (typeof state !== 'undefined' && state.setCurrentRoom) {
+		state.setCurrentRoom(current_room);
 	}
 };
 
-/*Checks if arg can be reached from this room
-* Returns the room if it can
-* Returns false if it cannot
-*
-* 'arg' is a single node, not a path
-* i.e. Home.can_cd("next_room") returns true
-*      Home.can_cd("next_room/another_room") is invalid
-*/
-Room.prototype.can_cd = function(arg){
-    //Don't allow for undefined or multiple paths
-    if (arg == undefined || arg.indexOf("/") > -1){
-        return false;
-    }
-    else if(arg === "..") {
-		return this.parents[0];
-	} else if (arg === ".") {
-        return this;
+Room.prototype.cd = function(args){
+	if (!args || args.length === 0){
+		enterRoom(Home);
+		return "Has tornat al caliu de la teva Casa!";
+	} else if (args.length > 1){
+		return "Només et pots desplaçar a una destinació alhora. Sintaxi: cd DESTINACIÓ";
+	} else if (args[0] === "..") {
+		if (this.parents.length >= 1){
+			if (this.matches("AthenaCluster")){
+				this.ev.fire("AthenaClusterExited");
+			}
+			enterRoom(this.parents[0]);
+			return "Has anat a " + current_room.toString() + ". " + current_room.intro_text;
+		} else {
+			return "Ja ets a la sala inicial.";
+		}
+	} else if (args[0] === "~"){
+		enterRoom(Home);
+		return "Has tornat al caliu de la teva Casa!";
+	} else if (args[0] === ".") {
+		enterRoom(current_room);
+		$("#scene").attr("src", "./static/img/none.gif");
+		return "Continues a " + current_room.toString() + ". " + current_room.intro_text;
 	} else {
-		for (var i = 0; i < this.children.length; i++){
-			if (arg === this.children[i].toString()){
-				return this.children[i];
+		var roomname = args[0];
+		var targetChild = this.getChildFromName(roomname);
+		if (targetChild !== -1){
+			if (targetChild.commands.indexOf("cd") > -1){
+				enterRoom(targetChild);
+				return "Has anat a " + current_room.toString() + ". " + current_room.intro_text;
+			} else {
+				if (targetChild.matches("AthenaCluster")){
+					this.ev.fire("tryEnterAthenaCluster");
+				} 
+				return targetChild.cmd_text["cd"] || "No pots entrar en aquesta sala ara mateix.";
 			}
 		}
+		return "No hi ha cap camí ni sala anomenada '" + args[0] + "'. Prova d'escriure 'ls' per veure quins camins tens a la vora.";
+	}
+};
+
+Room.prototype.can_cd = function(arg){
+	if (arg === undefined || arg.indexOf("/") > -1){
 		return false;
+	} else if (arg === "..") {
+		return this.parents[0] || false;
+	} else if (arg === ".") {
+		return this;
+	} else {
+		var target = this.getChildFromName(arg);
+		return target !== -1 ? target : false;
 	}
 };
 
 Room.prototype.less = function(args){
-	if (args.length < 1){
-		return "Pick a different item to less.";
+	if (!args || args.length < 1){
+		return "Indica quin objecte vols examinar o amb qui vols parlar (ex: cat OBJECTE o less OBJECTE).";
 	} else {
-		item = args[0];
-		for (var i = 0; i < this.items.length; i++){
-			if (item === this.items[i].toString()){
-                $("#scene").attr("src",this.items[i].picturename); // Display image of item
-                if (this.room_name === "Library" && (item === "InconspicuousLever")){
-                	this.ev.fire("pullLever");
-                }
-				return this.items[i].cmd_text["less"];
+		var targetItem = this.getItemFromName(args[0]);
+		if (targetItem !== -1){
+			$("#scene").attr("src", targetItem.picturename);
+			if ((this.matches("Library") || this.matches("Biblioteca")) && (targetItem.matches("InconspicuousLever") || targetItem.matches("PalancaDiscreta"))){
+				this.ev.fire("pullLever");
 			}
+			return targetItem.cmd_text["less"] || targetItem.cmd_text["cat"] || "No hi ha res d'especial a destacar.";
 		}
-		return "There is no " + args[0] + " here.";
+		return "Aquí no hi ha cap '" + args[0] + "'. Fes 'ls' per veure quins objectes tens al davant.";
 	}
 };
 
-//only valid for command names
+Room.prototype.cat = function(args){
+	return this.less(args);
+};
+
 Room.prototype.man = function(args){
-	if (args.length < 1){
-		return "Must ask the man about something to receive a response.";
+	if (!args || args.length < 1){
+		return "Has de demanar consell al Vell Savi sobre un encanteri concret (ex: man cd, man ls, man cat).";
 	} else {
-		if (args[0] in man_pages){
-			return man_pages[args[0]];
+		var cmd = args[0].toLowerCase();
+		if (cmd in man_pages){
+			return man_pages[cmd];
 		}
-		return "there is no man page for that command";
+		return "El Vell Savi no coneix cap encanteri anomenat '" + args[0] + "'. Escriu 'ajuda' per veure els encanteris bàsics.";
 	}
 };
 
 Room.prototype.help = function(args){
-	return "Type 'man' to ask the man for help";
+	return "Escriu 'man ENCANTERI' per consultar la saviesa del Vell Savi (ex: man cd, man ls, man cat, man mv, man rm).";
 };
 
-//TODO: for some reason this doesn't close the window
+Room.prototype.ajuda = function(args){
+	return this.help(args);
+};
+
 Room.prototype.exit = function(args){
 	window.open('', '_self', ''); 
 	window.close(); 
 };
 
 Room.prototype.pwd = function(args){
-    $("#scene").attr("src", this.room_pic);
-	return "";
+	$("#scene").attr("src", this.room_pic);
+	return "Ets a: " + this.room_name;
 };
 
 Room.prototype.mv = function(args){
-	if (args.length != 2){
-		return "You need to move thing A to place B. Use mov [thingA] [placeB].";
+	if (!args || args.length !== 2){
+		return "Has de moure l'element A al lloc B. Sintaxi: mv [OBJECTE] [DESTINACIÓ].";
 	} else {
-		var item_name_to_move = this.itemStringArray().indexOf(args[0]);
-		if ((item_name_to_move >= 0) && (this.childrenStringArray().indexOf(args[1]) >= 0)){
-			itemtoadd = this.items[this.itemStringArray().indexOf(args[0])];
-			this.children[this.childrenStringArray().indexOf(args[1])].addItem(itemtoadd);
-			if ((args[0] === "UglyTroll") && (this.room_name === "CaveOfDisgruntledTrolls")){
+		var itemToMove = this.getItemFromName(args[0]);
+		var destRoom = this.getChildFromName(args[1]);
+		if (itemToMove !== -1 && destRoom !== -1){
+			destRoom.addItem(itemToMove);
+			if ((itemToMove.matches("UglyTroll") || itemToMove.matches("TrollLleig")) && 
+				(this.matches("CaveOfDisgruntledTrolls") || this.matches("CovaDelsTrolls"))){
 				this.ev.fire("openSlide");
 			}
-			if ((args[0] === "Boulder") && (this.room_name === "DankRoom")){
+			if ((itemToMove.matches("Boulder") || itemToMove.matches("RocaGran")) && 
+				(this.matches("DankRoom") || this.matches("SalaHumida"))){
 				this.ev.fire("mvBoulder");
 			}
-			this.removeItem(args[0]);
-			return "Moved " + args[0] + " to " + args[1] + ".";
+			this.removeItem(itemToMove.itemname);
+			return "Has mogut " + itemToMove.itemname + " cap a " + destRoom.room_name + ".";
 		} else {
-			return "Must be a valid item and location to move it.";
+			return "L'objecte i la destinació han de ser vàlids. Prova de fer 'ls' per comprovar el nom exacte.";
 		}
 	}
 };
 
 Room.prototype.rm = function(args){
-	if (args.length < 1){
-		return "You must remove a particular item";
+	if (!args || args.length < 1){
+		return "Has d'indicar quin obstacle o objecte vols eliminar (ex: rm OBJECTE).";
 	} else {
-		stringtoreturn = "";
+		var stringtoreturn = "";
 		for (var i = 0; i < args.length; i++){
-			if (this.getItemFromName(args[i]) != -1){
-				if (this.getItemFromName(args[i]).valid_cmds.indexOf("rm") > 0){
-					var removedItem = this.removeItem(args[i]);
-					if (removedItem.itemname === "ThornyBrambles" && this.room_name === "OminousLookingPath"){
-						this.ev.fire("rmBrambles")
+			var item = this.getItemFromName(args[i]);
+			if (item !== -1){
+				if (item.valid_cmds.indexOf("rm") > -1){
+					var removedItem = this.removeItem(item.itemname);
+					if ((removedItem.matches("ThornyBrambles") || removedItem.matches("EsbarzersEspinosos")) && 
+						(this.matches("OminousLookingPath") || this.matches("CamiTetric"))){
+						this.ev.fire("rmBrambles");
 					}
-					if (removedItem.itemname === "UglyTroll" && this.room_name === "CaveOfDisgruntledTrolls"){
+					if ((removedItem.matches("UglyTroll") || removedItem.matches("TrollLleig")) && 
+						(this.matches("CaveOfDisgruntledTrolls") || this.matches("CovaDelsTrolls"))){
 						this.ev.fire("openSlide");
 					}
-					if (removedItem.itemname === "LargeBoulder" && this.room_name === "RockyPath"){
+					if ((removedItem.matches("LargeBoulder") || removedItem.matches("RocaGegant")) && 
+						(this.matches("RockyPath") || this.matches("CamiRoccos"))){
 						this.ev.fire("rmLargeBoulder");
 					}
 					if ("rm" in removedItem.cmd_text){
 						stringtoreturn += removedItem.cmd_text["rm"] + "\n";
 					} else {
-						stringtoreturn += "You just removed " + args[i] + "\n";
+						stringtoreturn += "Acabes d'eliminar " + removedItem.itemname + ".\n";
 					}
 				} else {
-					stringtoreturn += "That item cannot be removed";
+					stringtoreturn += "Aquest objecte no es pot eliminar.\n";
 				}
 			} else {
-				return "That's not a valid object to remove.";
+				return "Aquest no és un objecte vàlid per eliminar.";
 			}
 		}
 		return stringtoreturn;
@@ -329,140 +376,156 @@ Room.prototype.rm = function(args){
 };
 
 Room.prototype.grep = function(args){
-	if (this.commands.indexOf("grep") > 0){
+	if (this.commands.indexOf("grep") > -1){
+		if (!args || args.length < 2) {
+			return "Sintaxi: grep [PARAULA] [OBJECTE_O_LLIBRE].";
+		}
 		var word_to_find = args[0];
-		if (this.getItemFromName(args[1]) != -1){
-			var item_to_find_in_text = this.getItemFromName(args[1]).cmd_text["less"];
-			var line_array = item_to_find_in_text.split("\n");
-			var return_arr = jQuery.grep(line_array, function(line){ return (line.indexOf(word_to_find) > 0)});
-			return return_arr.join("\n");
+		var item = this.getItemFromName(args[1]);
+		if (item !== -1){
+			var text_content = item.cmd_text["less"] || item.cmd_text["cat"] || "";
+			var line_array = text_content.split("\n");
+			var return_arr = jQuery.grep(line_array, function(line){ 
+				return line.toLowerCase().indexOf(word_to_find.toLowerCase()) > -1;
+			});
+			if (return_arr.length > 0) {
+				return return_arr.join("\n");
+			} else {
+				return "No s'ha trobat cap línia amb la paraula '" + word_to_find + "'.";
+			}
 		} else {
-			return "Not a valid item to search in.";
+			return "Aquest no és un objecte o manuscrit vàlid on buscar.";
 		}
 	}
-	return "You haven't learned this spell yet.";
+	return "Encara no has après aquest encanteri.";
 };
 
 Room.prototype.touch = function(args){
-	if (args.length < 1){
-		return "You must touch something in particular.";
+	if (!args || args.length < 1){
+		return "Has d'indicar què vols crear (ex: touch Taulo o touch Engranatge).";
 	} else {
 		var createdItemsString = "";
 		for (var i = args.length - 1; i >= 0; i--) {
 			if (args[i].length > 0){
-				this.addItem(new Item(args[i], "This is a " + args[i]));
-				createdItemsString += args[i];
-				if (args[i] === "Plank" && this.room_name === "BrokenBridge"){
+				var newItem = new Item(args[i], "Aquest és un objecte " + args[i]);
+				this.addItem(newItem);
+				createdItemsString += args[i] + " ";
+				if ((args[i] === "Plank" || args[i] === "Taulo") && 
+					(this.matches("BrokenBridge") || this.matches("PontTrencat"))){
 					this.ev.fire("touchPlank");
-				} else if (args[i] === "Gear" && this.room_name === "ArtisanShop"){
+				} else if ((args[i] === "Gear" || args[i] === "Engranatge") && 
+					(this.matches("ArtisanShop") || this.matches("BotigaArtesana"))){
 					this.ev.fire("touchGear");
 				}
 			}
-		};
-		if (createdItemsString === ""){
-			return "You haven't touched anything. Check your syntax.";
 		}
-		return "You have just created " + createdItemsString;
+		if (createdItemsString === ""){
+			return "No has materialitzat res. Comprova la sintaxi.";
+		}
+		return "Gràcies a l'encanteri de creació has materialitzat: " + createdItemsString.trim();
 	}
-	return "You haven't learned this spell yet.";
 };
 
 Room.prototype.cp = function(args){
-	if (args.length != 2){
-		return "Incorrect syntax. Ask the OldMan for help.";
+	if (!args || args.length !== 2){
+		return "Sintaxi incorrecta. Demana consell al Vell Savi (man cp). Sintaxi: cp [OBJECTE] [NOU_NOM]";
 	} else {
 		var item_to_copy_name = args[0];
 		var new_item_name = args[1];
 		var item_to_copy = this.getItemFromName(item_to_copy_name);
-		if (item_to_copy != -1){
+		if (item_to_copy !== -1){
 			var newItem = new Item(new_item_name);
 			newItem.picturename = item_to_copy.picturename;
-			newItem.cmd_text = item_to_copy.cmd_text;
-			newItem.valid_cmds = item_to_copy.valid_cmds;
+			newItem.cmd_text = jQuery.extend({}, item_to_copy.cmd_text);
+			newItem.valid_cmds = item_to_copy.valid_cmds.slice();
 			this.addItem(newItem);
-			if (this.room_name === "ArtisanShop"){
-				if (new_item_name === "gear1" || new_item_name === "gear2" || new_item_name === "gear3" || new_item_name === "gear4" || new_item_name === "gear5"){
-					if (this.getItemFromName("gear1") != -1 && this.getItemFromName("gear2") != -1 && this.getItemFromName("gear3") != -1 && this.getItemFromName("gear4") != -1 && this.getItemFromName("gear5") != -1){
-						this.ev.fire("FiveGearsCopied");
-					}
+			if (this.matches("ArtisanShop") || this.matches("BotigaArtesana")){
+				var g1 = this.getItemFromName("gear1") !== -1 || this.getItemFromName("engranatge1") !== -1;
+				var g2 = this.getItemFromName("gear2") !== -1 || this.getItemFromName("engranatge2") !== -1;
+				var g3 = this.getItemFromName("gear3") !== -1 || this.getItemFromName("engranatge3") !== -1;
+				var g4 = this.getItemFromName("gear4") !== -1 || this.getItemFromName("engranatge4") !== -1;
+				var g5 = this.getItemFromName("gear5") !== -1 || this.getItemFromName("engranatge5") !== -1;
+				if (g1 && g2 && g3 && g4 && g5){
+					this.ev.fire("FiveGearsCopied");
 				}
-			} else if (this.room_name === "Farm"){
-				if (item_to_copy_name === "EarOfCorn" && new_item_name === "AnotherEarOfCorn"){
+			} else if (this.matches("Farm") || this.matches("Granja")){
+				if (item_to_copy.matches("EarOfCorn") || item_to_copy.matches("PanochaDeBlatDeMoro")){
 					this.ev.fire("CornCopied");
 				}
 			}
-			return "Just copied " + item_to_copy_name + " into " + new_item_name + ".";
+			return "Has duplicat correctament " + item_to_copy_name + " creant " + new_item_name + ".";
 		}
-		return "No item of that name to copy."
+		return "No hi ha cap objecte amb aquest nom per copiar.";
 	}
-	return "You haven't learned this spell yet.";
 };
 
 Room.prototype.terminus = function(args){
-	var text_to_return = this.cmd_text["terminus"]
+	var text_to_return = this.cmd_text["terminus"];
 	this.ev.fire("AthenaComboEntered");
 	return text_to_return;
 };
 
 Room.prototype.tellme = function(args){
-	if (args[0] === "combo"){
-		return "The combination is 'terminus' (without the quotes).";
+	if (args && (args[0] === "combo" || args[0] === "clau" || args[0] === "contrasenya")){
+		return "La combinació secreta és 'terminus' (sense les cometes).";
 	}
-	return "Incorrect syntax. Ask the OldMan for help.";
+	return "Sintaxi incorrecta. Demana ajuda al Vell Savi (man tellme).";
 };
 
 Room.prototype.mkdir = function(args){
-	if (this.commands.indexOf("mkdir") > 0){
-		if (args.length === 1){
+	if (this.commands.indexOf("mkdir") > -1){
+		if (args && args.length === 1){
 			var room_name_to_make = args[0];
-			var new_room = new Room(args[0]);
+			var new_room = new Room(room_name_to_make, "Aquesta és la nova estança " + room_name_to_make + ".");
 			link_rooms(this, new_room);
-			if (this.room_name === "Clearing" && room_name_to_make === "House"){
+			if ((this.matches("Clearing") || this.matches("Clariana")) && 
+				(room_name_to_make === "House" || room_name_to_make === "Casa")){
 				this.ev.fire("HouseMade");
 			}
-			return "New room " + args[0] + " created";
+			return "Has creat una nova sala arquitectònica: " + args[0] + ".";
 		}
-		return "Incorrect syntax. Ask the OldMan for help.";
+		return "Sintaxi incorrecta. Demana consell al Vell Savi (man mkdir).";
 	}
-	return "You have not learned this spell yet";
+	return "Encara no has après aquest encanteri.";
 };
 
 Room.prototype.sudo = function(args){
-	if (this.commands.indexOf("sudo") > 0){
-		if (args[0] === "less" && args[1] === "Certificate"){
+	if (this.commands.indexOf("sudo") > -1){
+		if (args && (args[0] === "less" || args[0] === "cat") && 
+			(args[1] === "Certificate" || args[1] === "Certificat")){
 			this.ev.fire("tryEnterSudo");
 			return;
 		} else {
-			return "Wrong syntax. Read the instructions again.";
+			return "Sintaxi incorrecta. Recorda consultar les instruccions del grimori.";
 		}
 	} 
-	return "You cannot cast this spell here.";
-}
+	return "No pots invocar aquest encanteri suprem aquí.";
+};
 
 Room.prototype.IHTFP = function(args){
-	if (this.commands.indexOf("IHTFP") > 0){
-		if (args.length === 0){
-			var text_to_return = this.cmd_text["IHTFP"]
-			this.ev.fire("sudoComplete");
-			return text_to_return;
-		}
-		return "Wrong password.";
+	if (this.commands.indexOf("IHTFP") > -1 || this.commands.indexOf("PARADIS") > -1){
+		var text_to_return = this.cmd_text["IHTFP"] || this.cmd_text["PARADIS"] || "Contrasenya correcta!";
+		this.ev.fire("sudoComplete");
+		return text_to_return;
 	}
-	return "This is not a valid spell.";
-}
+	return "Contrasenya incorrecta.";
+};
+
+Room.prototype.PARADIS = function(args){
+	return this.IHTFP(args);
+};
 
 Room.prototype.add = function(args){
-	if (this.commands.indexOf("add") > 0){
-		if (args[0] === "MagicLocker"){
+	if (this.commands.indexOf("add") > -1){
+		if (args && (args[0] === "MagicLocker" || args[0] === "ArmariMagic")){
 			this.ev.fire("addMagicLocker");
 			if (typeof this.cmd_text["add"] === 'undefined'){
-				return "You just added the " + args[0] + " locker";
+				return "Acabes d'afegir el " + args[0] + " a la teva col·lecció.";
 			}
 			return this.cmd_text["add"];
-		}
-		else {
-			return "No valid locker of that name.";
+		} else {
+			return "No hi ha cap armari o calaix màgic amb aquest nom.";
 		}
 	}
-	return "This is not a valid spell.";
-}
+	return "Aquest encanteri no és vàlid aquí.";
+};
