@@ -1,0 +1,347 @@
+<!DOCTYPE HTML>
+<html lang="ca" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Departament de Tecnologia i Digitalització"/>
+    <title>Operació Terminal: Ciberdefensa</title>
+
+    <!-- Scripts jQuery i jQuery Terminal -->
+    <script type="text/javascript" src="./static/javascript/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="./static/javascript/jquery.terminal-0.6.3.js"></script>
+
+    <!-- Motor del joc de ciberseguretat -->
+    <script type="text/javascript" src="./static/javascript/CyberFilesystem.js"></script>
+    <script type="text/javascript" src="./static/javascript/CyberGame.js"></script>
+
+    <!-- CSS -->
+    <link href="./static/css/jquery.terminal.css" rel="stylesheet"/>
+    <link href="./static/css/terminus.css" rel="stylesheet"/>
+  </head>
+  <body>
+    <!-- Capçalera del Centre de Comandament -->
+    <header id="app-header">
+      <div class="brand">
+        <span class="brand-icon">🛡️</span>
+        <div>
+          <span class="brand-title">OPERACIÓ TERMINAL: CIBERDEFENSA</span>
+        </div>
+      </div>
+      <div class="header-status">
+        <div id="student-badge" class="student-badge" title="Fes clic per modificar el nom de l'agent">
+          <span class="student-avatar">👤</span>
+          <span id="header-student-name">Agent: (Identifica't)</span>
+          <span class="badge-edit">✏️</span>
+        </div>
+        <div id="status-indicator" class="status-indicator">
+          <span class="status-dot"></span>
+          <span>AMENAÇA: CRÍTICA</span>
+        </div>
+        <button id="btn-show-diploma" class="btn-header" style="display:none;" title="Veure el teu diploma oficial">🏅 Diploma</button>
+        <button id="btn-restart" class="btn-header" title="Reinicia la missió">🔄 Reiniciar</button>
+      </div>
+    </header>
+
+    <!-- Contingut Principal Dividit -->
+    <main id="main-container">
+      <!-- Columna Esquerra: Terminal Interactiva -->
+      <section id="terminal-section">
+        <div class="terminal-header">
+          <div class="terminal-lights">
+            <span class="t-light t-red"></span>
+            <span class="t-light t-yellow"></span>
+            <span class="t-light t-green"></span>
+          </div>
+          <span>bash - ciberdefensa@institut-servidor:~</span>
+        </div>
+        <div id="term"></div>
+      </section>
+
+      <!-- Columna Dreta: Quadre de Comandament i Objectius -->
+      <section id="dashboard-section">
+        <!-- Targeta de la Missió Actual -->
+        <div class="dash-card">
+          <div class="card-title">🎯 Objectiu de la Missió</div>
+          <span id="mission-phase-badge" class="mission-phase">FASE 1: DIAGNÒSTIC INICIAL</span>
+          <div id="mission-title" class="mission-heading">On som i què ha passat?</div>
+
+          <div class="pedagogy-box">
+            <div class="pedagogy-title">💡 Per què fem això?</div>
+            <div id="mission-pedagogy">Tota sessió de ciberseguretat comença per orientar-se a la màquina i llegir l'informe d'incidència amb ordres bàsiques de navegació.</div>
+          </div>
+
+          <div class="mission-task-box">
+            <div class="task-label">Repte Actual:</div>
+            <div id="task-instruction" class="task-instruction">Esbrina la teva ubicació exacta al servidor central de l'institut.</div>
+            
+            <div class="hint-actions">
+              <button id="btn-toggle-hint" class="btn-hint">
+                <span>💡 Demanar Pista</span>
+              </button>
+              <div class="hint-rank-badge">
+                Rànquing: <span id="rank-val" class="hint-rank-val">CiberHacker d'Elit 🎖️</span>
+              </div>
+            </div>
+
+            <div id="hint-display-box" class="hint-display-box">
+              <span id="hint-level-tag" class="hint-step-tag">PISTA NIVELL 1 (Reflexió):</span>
+              <div id="hint-text">Pensa quina comanda bàsica de la teva guia serveix per 'imprimir el directori de treball' (té 3 lletres).</div>
+            </div>
+          </div>
+
+          <div class="progress-container">
+            <div class="progress-header">
+              <span>Progrés de la recuperació:</span>
+              <span id="progress-percentage">0%</span>
+            </div>
+            <div class="progress-bar-bg">
+              <div id="progress-bar" class="progress-bar-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Targeta de l'Arbre de Directoris Visual -->
+        <div class="dash-card">
+          <div class="card-title">📂 Explorador de Carpetes del Servidor (Temps Real)</div>
+          <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">
+            La carpeta ressaltada amb la fletxa verda indica la teva posició actual en tot moment:
+          </p>
+          <div id="tree-viewer"></div>
+        </div>
+
+        <!-- Targeta de Recordatori de Comandes -->
+        <div class="dash-card">
+          <div class="card-title">📖 Guia de Comandaments Essencials</div>
+          <table class="cheatsheet-table">
+            <thead>
+              <tr>
+                <th>Comanda</th>
+                <th>Significat</th>
+                <th>Funció</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="cmd-badge">pwd</span></td>
+                <td>Print Working Directory</td>
+                <td>On soc ara mateix a l'ordinador?</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">ls</span></td>
+                <td>List</td>
+                <td>Llista els fitxers i carpetes del davant.</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">cd &lt;lloc&gt;</span></td>
+                <td>Change Directory</td>
+                <td>Mou-te a una altra carpeta (ex: <code>cd /var/log</code>).</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">cd ..</span></td>
+                <td>Pujar de nivell</td>
+                <td>Torna enrere a la carpeta anterior.</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">cat &lt;fitxer&gt;</span></td>
+                <td>Concatenate</td>
+                <td>Llegeix el contingut d'un arxiu de text.</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">grep &lt;mot&gt; &lt;fitxer&gt;</span></td>
+                <td>Filtre de cerca</td>
+                <td>Cerca línies clau dins d'un fitxer gran.</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">ps</span></td>
+                <td>Process Status</td>
+                <td>Com el Gestor de Tasques: llista programes actius.</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">kill &lt;PID&gt;</span></td>
+                <td>Aturar procés</td>
+                <td>Atura un programa o virus pel seu número PID.</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">rm &lt;fitxer&gt;</span></td>
+                <td>Remove</td>
+                <td>Esborra un fitxer definitivament.</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">mkdir &lt;nom&gt;</span></td>
+                <td>Make Directory</td>
+                <td>Crea una carpeta nova per endreçar dades.</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">cp &lt;orig&gt; &lt;dest&gt;</span></td>
+                <td>Copy</td>
+                <td>Copia o duplica un fitxer a un altre directori.</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">scan</span></td>
+                <td>Escàner de xarxa</td>
+                <td>Mostra els equips connectats a la xarxa local.</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">firewall block &lt;IP&gt;</span></td>
+                <td>Tallafocs</td>
+                <td>Bloqueja l'accés a una adreça IP atacant.</td>
+              </tr>
+              <tr>
+                <td><span class="cmd-badge">ajuda</span> / <span class="cmd-badge">man</span></td>
+                <td>Manual d'ajuda</td>
+                <td>Demana una pista sobre la missió o comanda.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <!-- Modal de Login / Identificació de l'Alumne/a -->
+    <div id="login-modal" class="modal-backdrop">
+      <div class="login-card">
+        <div class="login-header">
+          <div class="login-icon">🛡️</div>
+          <h2>IDENTIFICACIÓ DE L'AGENT</h2>
+          <p class="login-subtitle">Projecte de Tecnologia i Digitalització</p>
+        </div>
+        <form id="login-form">
+          <div class="form-group">
+            <label for="input-nom">Nom de l'alumne/a: <span class="required">*</span></label>
+            <input type="text" id="input-nom" placeholder="Ex: Maria" required autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="input-cognoms">Cognoms: <span class="required">*</span></label>
+            <input type="text" id="input-cognoms" placeholder="Ex: Garcia Puig" required autocomplete="off" />
+          </div>
+          <div class="form-group">
+            <label for="input-curs">Grup: <span class="required">*</span></label>
+            <select id="input-curs" required>
+              <option value="1A">1A</option>
+              <option value="1B">1B</option>
+              <option value="2A" selected>2A</option>
+              <option value="2B">2B</option>
+              <option value="3A">3A</option>
+              <option value="3B">3B</option>
+              <option value="4A">4A</option>
+              <option value="4B">4B</option>
+              <option value="Altre grup">Altre grup</option>
+            </select>
+          </div>
+          <div class="login-instructions">
+            ℹ️ Aquestes dades s'utilitzaran per generar el teu <strong>Diploma Oficial de Tecnologia</strong> al finalitzar la missió i el qüestionari.
+          </div>
+          <button type="submit" id="btn-start-mission" class="btn-primary btn-block">
+            Començar Missió de Ciberdefensa 🚀
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal del Qüestionari Final (20 preguntes) -->
+    <div id="quiz-modal" class="modal-backdrop" style="display: none;">
+      <div class="quiz-card">
+        <div class="quiz-header">
+          <div class="quiz-badge">AVALUACIÓ OFICIAL DE CIBERDEFENSA</div>
+          <h2>Qüestionari Tècnic de Comandes Linux</h2>
+          <p class="quiz-desc">Respon les 20 preguntes sobre les comandes emprades al joc per calcular la teva qualificació competencial i obtenir el diploma.</p>
+          <div class="quiz-progress-bar-container">
+            <div class="quiz-progress-info">
+              <span id="quiz-progress-text">Pregunta 1 de 20</span>
+              <span id="quiz-score-live">Puntuació: 0 / 20</span>
+            </div>
+            <div class="quiz-progress-bar-bg">
+              <div id="quiz-progress-bar" class="quiz-progress-bar-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="quiz-content" class="quiz-body">
+          <div id="quiz-question-title" class="quiz-q-title">Carregant pregunta...</div>
+          <div id="quiz-options-container" class="quiz-options-list"></div>
+          <div id="quiz-explanation-box" class="quiz-explanation" style="display: none;"></div>
+        </div>
+
+        <div class="quiz-footer">
+          <button id="btn-next-question" class="btn-primary" style="display: none;">Següent Pregunta ▶️</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal del Diploma Oficial de Tecnologia -->
+    <div id="diploma-modal" class="modal-backdrop" style="display: none;">
+      <div class="diploma-wrapper">
+        <div class="diploma-actions-bar no-print">
+          <button id="btn-print-diploma" class="btn-print">🖨️ Imprimir Diploma / Desar en PDF</button>
+          <button id="btn-restart-from-diploma" class="btn-secondary">🔄 Nova Partida</button>
+          <button id="btn-close-diploma" class="btn-secondary">Tancar</button>
+        </div>
+
+        <div id="printable-diploma" class="diploma-card">
+          <div class="diploma-border-inner">
+            <div class="diploma-header">
+              <div class="diploma-logos">
+                <div class="dept-logo">🛡️ DEPARTAMENT DE TECNOLOGIA I DIGITALITZACIÓ</div>
+                <div class="inst-tag">PROJECTE CIBERSEGURETAT</div>
+              </div>
+              <h1 class="diploma-main-title">DIPLOMA OFICIAL DE CIBERDEFENSA</h1>
+              <div class="diploma-subtitle">ACREDITACIÓ DE COMPETÈNCIA EN SISTEMES GNU/LINUX I SEGURETAT DE XARXES</div>
+            </div>
+
+            <div class="diploma-body">
+              <p class="diploma-awarded-text">S'atorga el present reconeixement oficial de mèrit a l'alumne/a:</p>
+              <h2 id="diploma-student-name" class="diploma-student-name">Nom de l'Alumne</h2>
+              <div class="diploma-student-group">Grup: <strong id="diploma-student-curs">2A</strong></div>
+
+              <p class="diploma-statement">
+                Per haver neutralitzat amb èxit la intrusió al servidor del centre a l'operació «OPERACIÓ TERMINAL», 
+                aturant processos maliciosos en execució a la memòria RAM, 
+                eliminant programari espia del disc dur, restaurant les bases de dades crítiques mitjançant còpies de seguretat 
+                i configurant el tallafocs de xarxa per protegir l'institut.
+              </p>
+
+              <!-- Resum d'estadístiques i Qualificació Competencial -->
+              <div class="diploma-metrics-grid">
+                <div class="metric-item">
+                  <div class="metric-label">Errors a la Terminal</div>
+                  <div id="diploma-errors-val" class="metric-val">0</div>
+                </div>
+                <div class="metric-item">
+                  <div class="metric-label">Pistes Sol·licitades</div>
+                  <div id="diploma-hints-val" class="metric-val">0</div>
+                </div>
+                <div class="metric-item">
+                  <div class="metric-label">Qüestionari de Comandes</div>
+                  <div id="diploma-quiz-val" class="metric-val">20 / 20</div>
+                </div>
+                <div class="metric-item grade-box">
+                  <div class="metric-label">QUALIFICACIÓ COMPETENCIAL</div>
+                  <div id="diploma-grade-badge" class="grade-badge grade-ae">AE</div>
+                  <div id="diploma-grade-desc" class="grade-desc">Assolit Excel·lent</div>
+                  <div id="diploma-grade-num" class="grade-num">Nota: 10 / 10</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="diploma-footer">
+              <div class="diploma-meta">
+                <div>Data d'emissió: <strong id="diploma-date">19 d'octubre de 2026</strong></div>
+                <div class="diploma-hash">Codi Verificació: <strong id="diploma-code">OPT-TERM-2026-X88</strong></div>
+              </div>
+              <div class="diploma-signatures">
+                <div class="sig-box">
+                  <div class="sig-line"></div>
+                  <span>El/La Professor/a de Tecnologia</span>
+                </div>
+                <div class="sig-box">
+                  <div class="sig-line"></div>
+                  <span>L'Agent de Ciberdefensa</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
