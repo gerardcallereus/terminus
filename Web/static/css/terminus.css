@@ -533,19 +533,7 @@ body {
     font-weight: 600;
     font-family: var(--font-mono);
     color: var(--accent-cyan);
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.student-badge:hover {
-    background: rgba(0, 229, 255, 0.2);
-    border-color: var(--accent-cyan);
-    transform: translateY(-1px);
-}
-
-.badge-edit {
-    font-size: 11px;
-    opacity: 0.7;
+    user-select: none;
 }
 
 /* Modals generals */
