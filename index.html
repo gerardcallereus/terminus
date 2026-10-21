@@ -37,6 +37,7 @@
           <span class="status-dot"></span>
           <span>AMENAÇA: CRÍTICA</span>
         </div>
+        <button id="btn-show-tutorial" class="btn-header" title="Com fer servir la terminal">📖 Tutorial Terminal</button>
         <button id="btn-show-diploma" class="btn-header" style="display:none;" title="Veure el teu diploma oficial">🏅 Diploma</button>
         <button id="btn-restart" class="btn-header" title="Reinicia la missió">🔄 Reiniciar</button>
       </div>
@@ -154,7 +155,7 @@
               <tr>
                 <td><span class="cmd-badge">ps</span></td>
                 <td>Process Status</td>
-                <td>Com el Gestor de Tasques: llista programes actius.</td>
+                <td>Gestor de Tasques: llista els processos actius a la RAM, el consum de CPU i el seu PID.</td>
               </tr>
               <tr>
                 <td><span class="cmd-badge">kill &lt;PID&gt;</span></td>
@@ -235,6 +236,75 @@
             Començar Missió de Ciberdefensa 🚀
           </button>
         </form>
+      </div>
+    </div>
+
+    <!-- Modal del Minitutorial de la Terminal -->
+    <div id="tutorial-modal" class="modal-backdrop" style="display: none;">
+      <div class="tutorial-card">
+        <div class="tutorial-header">
+          <div class="tutorial-badge">GUIA D'INICIACIÓ RÀPIDA</div>
+          <h2>🖥️ Com fer servir la Terminal?</h2>
+          <p class="tutorial-subtitle">4 regles d'or per dominar la línia de comandes com un/a agent expert</p>
+        </div>
+
+        <div class="tutorial-grid">
+          <!-- Pas 1 -->
+          <div class="tutorial-step-card">
+            <div class="step-num-badge">1</div>
+            <div class="step-icon">⌨️</div>
+            <h3>Adéu al ratolí: tot és text</h3>
+            <p>A la consola no es fa clic sobre les carpetes ni els arxius. Totes les instruccions s'escriuen directament amb el teclat.</p>
+            <div class="step-highlight">
+              ⚠️ L'ordinador <strong>no fa res</strong> fins que no prems la tecla <kbd>ENTER / INTRO ↵</kbd>!
+            </div>
+          </div>
+
+          <!-- Pas 2 -->
+          <div class="tutorial-step-card">
+            <div class="step-num-badge">2</div>
+            <div class="step-icon">💬</div>
+            <h3>El símbol del sistema (Prompt)</h3>
+            <p>Veus <code class="code-prompt">ciberdefensa@institut:~$</code> a la pantalla?</p>
+            <ul class="step-list">
+              <li><strong>ciberdefensa:</strong> el teu usuari d'agent.</li>
+              <li><strong>institut:</strong> el servidor on ets connectat/da.</li>
+              <li><strong>~ :</strong> la teva carpeta d'inici (canvia en moure't).</li>
+              <li><strong>$ :</strong> indica que la màquina espera ordres.</li>
+            </ul>
+          </div>
+
+          <!-- Pas 3 -->
+          <div class="tutorial-step-card">
+            <div class="step-num-badge">3</div>
+            <div class="step-icon">📐</div>
+            <h3>L'espai és sagrat! (Sintaxi)</h3>
+            <p>Si una ordre necessita un fitxer o carpeta, cal separar-los sempre amb un <strong>espai</strong>:</p>
+            <div class="syntax-compare">
+              <div class="syntax-good">✅ <code>cat missio.txt</code> &nbsp;|&nbsp; <code>cd /var/log</code></div>
+              <div class="syntax-bad">❌ <code>catmissio.txt</code> &nbsp;|&nbsp; <code>cd/var/log</code></div>
+            </div>
+          </div>
+
+          <!-- Pas 4 -->
+          <div class="tutorial-step-card">
+            <div class="step-num-badge">4</div>
+            <div class="step-icon">⚡</div>
+            <h3>Superpoders del teclat</h3>
+            <p>Fes servir aquests trucs per anar molt més ràpid i evitar faltes:</p>
+            <ul class="step-list">
+              <li><kbd>TAB ↹</kbd> <strong>Autocompleció:</strong> Comença a escriure i prem Tab; el nom del fitxer s'omplirà sol!</li>
+              <li><kbd>▲</kbd> / <kbd>▼</kbd> <strong>Historial:</strong> Recupera ordres anteriors sense teclejar-les de nou.</li>
+              <li>Escriu <code>clear</code> per netejar la consola si s'omple.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="tutorial-footer">
+          <button id="btn-start-terminal" class="btn-primary btn-tutorial-start">
+            Entesos! Entrar a la Terminal 🚀
+          </button>
+        </div>
       </div>
     </div>
 

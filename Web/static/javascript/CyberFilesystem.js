@@ -60,7 +60,7 @@ CyberFilesystem.prototype.initDefaultFilesystem = function() {
         "1. Investigueu els fitxers de registre a '/var/log' per trobar la IP del hacker.\n" +
         "2. Neutralitzeu el virus que s'amaga a la carpeta temporal '/tmp'.\n" +
         "3. Recupereu la còpia neta de les notes des de '/backups' cap a '/servidor_notes'.\n" +
-        "4. Escanegeu la xarxa amb 'scan' i bloquegeu l'atacant amb el tallafocs ('firewall block').\n\n" +
+        "4. Escanegeu els equips de la xarxa local i activeu el tallafocs per expulsar l'atacant.\n\n" +
         "Molta sort! L'institut compta amb vosaltres.\n" +
         "-- El Cap d'Estudis i el Professorat de Tecnologia\n"
     );
@@ -75,7 +75,7 @@ CyberFilesystem.prototype.initDefaultFilesystem = function() {
         " * cd ..               : Torna enrere a la carpeta pare (puja un nivell).\n" +
         " * cat <fitxer>        : Mostra el contingut complet d'un arxiu.\n" +
         " * grep <mot> <fitxer> : Cerca una paraula clau dins d'un fitxer gran.\n" +
-        " * ps                  : Mostra els processos i programes en execució.\n" +
+        " * ps                  : Llista els processos actius a la memòria RAM i el seu PID (Gestor de Tasques).\n" +
         " * kill <PID>          : Atura un procés pel seu número identificador (PID).\n" +
         " * rm <fitxer>         : Esborra un arxiu definitivament.\n" +
         " * mkdir <carpeta>     : Crea una carpeta nova.\n" +
@@ -400,17 +400,25 @@ CyberFilesystem.prototype.grep = function(query, pathStr) {
 
 CyberFilesystem.prototype.ps = function() {
     var out = [
-        "PID    USUARI       CPU%   MEMÒRIA   NOM_PROCÉS          ESTAT",
-        "------------------------------------------------------------------"
+        "================================================================================",
+        "  ESTAT DELS PROCESSOS EN MEMÒRIA RAM (ps - Process Status)                     ",
+        "================================================================================",
+        "  PID    USUARI        CPU%    MEMÒRIA    NOM DEL PROCÉS        ESTAT",
+        "--------------------------------------------------------------------------------"
     ];
     for (var i = 0; i < this.processes.length; i++) {
         var p = this.processes[i];
         var isMalicious = p.name.indexOf("virus") > -1;
         var pColor = isMalicious ? "[[;#ff5555;]" : "[[;#e2e8f0;]";
-        var line = (p.pid + "").padEnd(7) + p.user.padEnd(13) + p.cpu.padEnd(7) + p.mem.padEnd(10) + p.name.padEnd(20) + p.status;
+        var line = "  " + (p.pid + "").padEnd(7) + p.user.padEnd(14) + p.cpu.padEnd(8) + p.mem.padEnd(11) + p.name.padEnd(22) + p.status;
         out.push(pColor + line + "]");
     }
-    out.push("\n[[;#7dd3fc;]CONSELL DE CIBERSEGURETAT:] Si detectes un procés maliciós, atura'l amb: kill <PID>");
+    out.push("--------------------------------------------------------------------------------");
+    out.push("[[;#7dd3fc;]ℹ️ GUIA DE COLUMNES DEL GESTOR DE PROCESSOS:]");
+    out.push("  • [[;#ffb703;]PID (Process ID):] Número identificador únic del programa a la memòria.");
+    out.push("  • [[;#ffb703;]CPU% / MEMÒRIA:] Consum de recursos. Un valor proper al 100% col·lapsa el servidor!");
+    out.push("  • [[;#ffb703;]NOM / ESTAT:] Programa associat i la seva condició actual al sistema.");
+    out.push("\n[[;#94a3b8;]Observa la taula per identificar quin procés està col·lapsant la CPU i atura'l pel seu PID.]");
     return out.join("\n");
 };
 
@@ -458,7 +466,8 @@ CyberFilesystem.prototype.scan = function() {
         "192.168.1.45   Ordinador-Cap-Estudis       80              ONLINE",
         "[[;#ff5555;]192.168.1.88   EQUIP-DESCONEGUT-INTRÚS     4444 (Troià)    ALERTA: INTENT D'INTRUSIÓ ACTIU!]",
         "------------------------------------------------------------------",
-        "[[;#7dd3fc;]ACCIÓ URGENT:] Bloqueja immediatament l'atacant amb: firewall block 192.168.1.88"
+        "[[;#ffb703;]AVÍS DE CIBERDEFENSA:] S'ha detectat un equip intrús actiu a la xarxa.",
+        "[[;#94a3b8;]Per protegir el centre, cal utilitzar el tallafocs per barrar el pas a aquesta adreça IP.]"
     ].join("\n");
 };
 
@@ -505,9 +514,12 @@ CyberFilesystem.prototype.man = function(cmd) {
                 "EXPLICACIÓ: Cerca paraules clau dins d'un fitxer gran sense haver-te de llegir 500 línies.\n" +
                 "EXEMPLE: grep ALERTA /var/log/intrusio.log",
 
-        "ps": "NOM: ps - Process Status\n" +
-              "EXPLICACIÓ: Mostra els programes que estan funcionant a la memòria RAM del servidor.\n" +
-              "EXEMPLE: ps",
+        "ps": "NOM: ps - Process Status (Estat dels Processos)\n" +
+              "EXPLICACIÓ: Funciona com el Gestor de Tasques de l'ordinador. Llista els programes i serveis que s'estan executant a la memòria RAM en temps real.\n" +
+              "DETALLS CLAU PER A CIBERSEGURETAT:\n" +
+              "  * Cada programa en marxa rep un PID (Process ID), un número identificador únic.\n" +
+              "  * Permet detectar virus observant la columna CPU%: un valor proper al 100% indica col·lapse del processador.\n" +
+              "SINTAXI: ps",
 
         "kill": "NOM: kill - Terminate process\n" +
                 "EXPLICACIÓ: Atura de cop un procés perillós o congelat utilitzant el seu PID.\n" +

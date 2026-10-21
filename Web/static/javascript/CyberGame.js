@@ -87,7 +87,7 @@ var PhasesInfo = [
         phase: 3,
         badge: "FASE 3: NEUTRALITZAR EL MALWARE",
         title: "Caçar el virus ocult a la carpeta /tmp",
-        pedagogy: "Els pirates solen amagar programes maliciosos a la carpeta temporal '/tmp'. Cal aturar el procés de la memòria amb 'kill' i esborrar l'arxiu amb 'rm'.",
+        pedagogy: "Els pirates solen dipositar codi maliciós a la carpeta temporal '/tmp'. Cal auditar els processos de la memòria RAM per aturar el programari nociu pel seu PID abans d'eliminar-ne el fitxer del disc.",
         tasks: [
             {
                 id: 7,
@@ -103,14 +103,14 @@ var PhasesInfo = [
             },
             {
                 id: 9,
-                desc: "Obre el llistat de processos actius a la memòria RAM per esbrinar el número PID del virus miner.",
-                hintL1: "Comprova a la teva guia quina eina de dues lletres funciona com el 'Gestor de Tasques' (Process Status).",
+                desc: "Audita els processos en execució a la memòria RAM per esbrinar el número identificador (PID) del virus miner.",
+                hintL1: "Comprova a la teva guia quina ordre de dues lletres mostra l'estat dels processos (Process Status, com el Gestor de Tasques).",
                 hintL2: "Escriu la comanda: <span class='hint-code-text'>ps</span>"
             },
             {
                 id: 10,
                 desc: "Atura el procés del virus abans que cremi la CPU del servidor (utilitza el seu número PID que has vist a la llista).",
-                hintL1: "L'ordre per finalitzar processos s'anomena 'kill' i necessita el número identificador PID del virus (4092).",
+                hintL1: "Consulta la teva guia de comandes: quina ordre serveix per aturar un procés indicant el seu número PID?",
                 hintL2: "Escriu la comanda: <span class='hint-code-text'>kill 4092</span>"
             },
             {
@@ -729,8 +729,40 @@ function triggerVictory() {
 
 // Analitzador d'errors comuns de principiant per donar feedback pedagògic
 function checkBeginnerMistakes(rawInput, term) {
-    var clean = rawInput.trim().toLowerCase();
-    var parts = clean.split(" ");
+    var clean = rawInput.trim();
+    var lower = clean.toLowerCase();
+
+    // Comprovació de comandes enganxades sense espai (ex: cd/var/log o catmissio.txt)
+    if (lower.indexOf("cd/") === 0) {
+        GameProgress.errorsCount++;
+        saveGameToStorage();
+        term.echo("[[;#ffb703;]💡 PISTA DOCENT:] Has enganxat la comanda amb la ruta! A Linux cal deixar sempre un espai. Prova: cd " + clean.substring(2));
+        return true;
+    }
+    if (lower.indexOf("cat/") === 0) {
+        GameProgress.errorsCount++;
+        saveGameToStorage();
+        term.echo("[[;#ffb703;]💡 PISTA DOCENT:] Recorda deixar un espai entre 'cat' i la ruta del fitxer! Prova: cat " + clean.substring(3));
+        return true;
+    }
+    if (lower.indexOf("rm/") === 0) {
+        GameProgress.errorsCount++;
+        saveGameToStorage();
+        term.echo("[[;#ffb703;]💡 PISTA DOCENT:] Cal separar 'rm' i el nom de l'arxiu amb un espai! Prova: rm " + clean.substring(2));
+        return true;
+    }
+    if (lower === "catmissio.txt" || lower === "catmissio") {
+        GameProgress.errorsCount++;
+        saveGameToStorage();
+        term.echo("[[;#ffb703;]💡 PISTA DOCENT:] Falta un espai entre la comanda i el fitxer! Escriu 'cat missio.txt'.");
+        return true;
+    }
+    if (lower === "ls-l") {
+        term.echo("[[;#ffb703;]💡 PISTA DOCENT:] Recorda deixar un espai abans del guió: 'ls -l'.");
+        return true;
+    }
+
+    var parts = lower.split(" ");
     var cmd = parts[0];
 
     if (cmd === "open" || cmd === "obrir" || cmd === "llegir" || cmd === "veure") {
@@ -869,7 +901,7 @@ function checkMissionProgress(cmd, args, output) {
 
     // Pas 9: ps
     if (GameProgress.step === 9 && cmd === "ps") {
-        advanceStep("El procés 4092 (virus_miner.sh) està col·lapsant la CPU al 98%! Cal aturar aquest procés immediatament pel seu número identificador.");
+        advanceStep("Molt bé! Has auditat la memòria RAM. El procés 'virus_miner.sh' amb PID 4092 col·lapsa la CPU al 98%. Cal aturar aquest procés pel seu número identificador.");
         return;
     }
 
@@ -924,7 +956,7 @@ function checkMissionProgress(cmd, args, output) {
             if (term) {
                 term.echo("\n[[;#ffb703;]⚠️ ALERTA DOCENT:] Has executat la comanda 'cp', però el fitxer NO s'ha desat a la carpeta segura que vas crear al pas 12 (/servidor_notes/recuperat).");
                 term.echo("[[;#ffb703;]Destí indicat:] " + (args && args[1] ? args[1] : "(cap)") + " | [[;#7dd3fc;]Destí requerit:] /servidor_notes/recuperat/");
-                term.echo("[[;#00ffaa;]Recorda la sintaxi:] cp notes_recuperades.csv /servidor_notes/recuperat/\n");
+                term.echo("[[;#00ffaa;]Recorda l'estructura:] cp <fitxer_origen> <carpeta_destí/>\n");
             }
             return;
         }
@@ -942,7 +974,7 @@ function checkMissionProgress(cmd, args, output) {
                 var term = $("#term").terminal();
                 if (term) {
                     term.echo("\n[[;#ff5555;]⚠️ ATENCIÓ:] La carpeta '/servidor_notes/recuperat' està buida! Les notes no es van copiar a aquest directori.");
-                    term.echo("[[;#ffb703;]Copia-les ara amb:] [[;#00ffaa;]cp /backups/notes_recuperades.csv /servidor_notes/recuperat/]\n");
+                    term.echo("[[;#ffb703;]Consell:] Torna a copiar el fitxer des de '/backups' cap a la carpeta segura de destinació.\n");
                 }
                 return;
             }
@@ -952,7 +984,7 @@ function checkMissionProgress(cmd, args, output) {
             if (hasNotes) {
                 var term = $("#term").terminal();
                 if (term) {
-                    term.echo("\n[[;#00ffaa;]✔ MOLT BÉ:] Ara sí que les notes estan a /servidor_notes/recuperat! Fes 'ls /servidor_notes/recuperat' per comprovar-ho.\n");
+                    term.echo("\n[[;#00ffaa;]✔ MOLT BÉ:] Ara sí que les notes estan a /servidor_notes/recuperat! Comprova el contingut de la carpeta per verificar-ho.\n");
                 }
             }
         }
@@ -1173,18 +1205,42 @@ $(document).ready(function() {
             "[[;#00ffaa;]✔ SESSIÓ ANTERIOR RESTAURADA AMB ÈXIT!]\n" +
             "S'ha recuperat el teu progrés guardat (Pas " + GameProgress.step + "/17).\n" +
             "Pots continuar la missió exactament des del punt on la vas deixar!\n\n" +
-            "(Revisa el repte actual al panell dret o escriu 'ajuda').\n"
+            "(Revisa el repte actual al panell dret, consulta el '📖 Tutorial' o escriu 'ajuda').\n"
             :
             "========================================================================\n" +
             "     🚨 CENTRE D'OPERACIONS DE CIBERDEFENSA 🚨                          \n" +
             "========================================================================\n\n" +
             "ALERTA: S'ha detectat un atac informàtic contra el servidor de l'institut!\n" +
             "Heu d'investigar l'incident, neutralitzar el virus i protegir les notes.\n\n" +
-            "Feu servir el vostre enginy i la guia de comandes per resoldre cada repte.\n" +
-            "(El joc desa automàticament el teu progrés per si has de continuar en una altra classe).\n"
+            "[[;#7dd3fc;]🔰 COM FER SERVIR AQUESTA TERMINAL (MINITUTORIAL):]\n" +
+            "  1. Escriu la comanda amb el teclat i prem la tecla [[;#ffb703;][ENTER / INTRO ↵]].\n" +
+            "  2. Deixa sempre un espai entre l'ordre i el fitxer (ex: 'cat missio.txt').\n" +
+            "  3. Prem la tecla [[;#ffb703;][TAB ↹]] per autocompletar noms sense faltes.\n" +
+            "  4. Fes servir les fletxes [[;#ffb703;][▲ / ▼]] per recuperar comandes anteriors.\n" +
+            "  5. Si necessites un cop de mà, escriu [[;#00ffaa;]ajuda] o prem el botó '📖 Tutorial'.\n\n" +
+            "El teu progrés es desa automàticament pas a pas.\n" +
+            "Comença comprovant en quina carpeta et trobes amb la comanda 'pwd'!\n"
         ),
         name: 'ciber_terminal',
         history: true
+    });
+
+    // Funció per mostrar el Minitutorial
+    function showTutorialModal() {
+        $("#tutorial-modal").fadeIn(250);
+    }
+
+    // Botó per obrir el Tutorial des de la capçalera
+    $("#btn-show-tutorial").click(function() {
+        showTutorialModal();
+    });
+
+    // Botons per tancar el Tutorial i entrar al Terminal
+    $("#btn-start-terminal, #btn-close-tutorial").click(function() {
+        $("#tutorial-modal").fadeOut(250, function() {
+            var term = $("#term").terminal();
+            if (term) term.focus();
+        });
     });
 
     // Gestió del Formulari de Login
@@ -1206,7 +1262,9 @@ $(document).ready(function() {
         };
         updateStudentHeader();
         saveGameToStorage();
-        $("#login-modal").fadeOut();
+        $("#login-modal").fadeOut(250, function() {
+            showTutorialModal();
+        });
     });
 
     // Clic al badge d'alumne per editar dades
