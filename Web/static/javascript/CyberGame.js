@@ -1173,14 +1173,43 @@ $(document).ready(function() {
 
             case "ajuda":
             case "help":
+                if (GameProgress.completed) {
+                    term.echo("[[;#00ffaa;]Missió completada! El servidor ja ha estat assegurat.]");
+                    break;
+                }
                 var curPhase = PhasesInfo[GameProgress.phase - 1];
                 var curT = curPhase.tasks.find(function(t) { return t.id === GameProgress.step; });
-                term.echo(
-                    "[[;#ffb703;]=== AJUDA DE CIBERDEFENSA ===]\n" +
-                    "Repte actual: " + (curT ? curT.desc : "Missió finalitzada") + "\n" +
-                    "💡 Pista reflexiva: " + (curT ? curT.hintL1 : "") + "\n\n" +
-                    "(Pots prémer el botó '💡 Demanar Pista' al panell dret o consultar la guia de comandes)."
-                );
+                if (!curT) break;
+
+                var isSecondRequest = (GameProgress.currentHintLevel === 1 || (args && args[0] && (args[0] === "solucio" || args[0] === "solució")));
+
+                if (GameProgress.currentHintLevel === 0) {
+                    GameProgress.currentHintLevel = 1;
+                    GameProgress.hintsUsedCount++;
+                } else if (isSecondRequest) {
+                    GameProgress.currentHintLevel = 2;
+                }
+
+                updateUI();
+                saveGameToStorage();
+
+                if (GameProgress.currentHintLevel === 2) {
+                    var cleanHintL2 = curT.hintL2.replace(/<[^>]*>/g, "");
+                    term.echo(
+                        "[[;#ffb703;]=== AJUDA DE CIBERDEFENSA (NIVELL 2: SOLUCIÓ DIRECTA) ===]\n" +
+                        "Repte actual: " + curT.desc + "\n" +
+                        "🔑 " + cleanHintL2 + "\n" +
+                        "[[;#ffb703;]⚠️ Pista comptabilitzada al teu diploma:] Total pistes sol·licitades = " + GameProgress.hintsUsedCount + "\n"
+                    );
+                } else {
+                    term.echo(
+                        "[[;#ffb703;]=== AJUDA DE CIBERDEFENSA (NIVELL 1: PISTA DE REFLEXIÓ) ===]\n" +
+                        "Repte actual: " + curT.desc + "\n" +
+                        "💡 " + curT.hintL1 + "\n" +
+                        "[[;#ffb703;]⚠️ Pista comptabilitzada al teu diploma:] Total pistes sol·licitades = " + GameProgress.hintsUsedCount + "\n" +
+                        "[[;#94a3b8;](Si encara necessites la comanda exacta, escriu 'ajuda solucio' o prem 'Veure Solució' al panell dret)]\n"
+                    );
+                }
                 break;
 
             case "clear":
@@ -1219,7 +1248,7 @@ $(document).ready(function() {
             "  4. Fes servir les fletxes [[;#ffb703;][▲ / ▼]] per recuperar comandes anteriors.\n" +
             "  5. Si necessites un cop de mà, escriu [[;#00ffaa;]ajuda] o prem el botó '📖 Tutorial'.\n\n" +
             "El teu progrés es desa automàticament pas a pas.\n" +
-            "Comença comprovant en quina carpeta et trobes amb la comanda 'pwd'!\n"
+            "Consulta el teu primer repte al panell de la dreta per començar la missió!\n"
         ),
         name: 'ciber_terminal',
         history: true
