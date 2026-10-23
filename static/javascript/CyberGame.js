@@ -77,9 +77,9 @@ var PhasesInfo = [
             },
             {
                 id: 6,
-                desc: "Investiga el registre d'incidències ('intrusio.log') per descobrir quina adreça IP ha atacat el centre i on s'ha amagat.",
-                hintL1: "Pots llegir tot el fitxer amb 'cat', o bé utilitzar 'grep' per cercar només la paraula ALERTA.",
-                hintL2: "Escriu la comanda: <span class='hint-code-text'>cat intrusio.log</span> (o bé: <span class='hint-code-text'>grep ALERTA intrusio.log</span>)"
+                desc: "Filtra el registre d'incidències ('intrusio.log') amb la comanda 'grep' per trobar la IP atacant.",
+                hintL1: "El fitxer té centenars de línies! Fes servir 'grep' amb la paraula clau ALERTA seguit de 'intrusio.log'.",
+                hintL2: "Escriu la comanda: <span class='hint-code-text'>grep ALERTA intrusio.log</span>"
             }
         ]
     },
@@ -615,16 +615,14 @@ function finishQuiz() {
 }
 
 function computeFinalGrade() {
-    var quizPoints = (GameProgress.quizScore / 20) * 6.5; // Fins a 6.5 punts pel test de 20 preguntes
-    var practicalBase = 3.5; // Fins a 3.5 punts per la pràctica terminal
-    var penalties = (GameProgress.hintsUsedCount * 0.15) + (GameProgress.errorsCount * 0.05);
-    var practicalScore = Math.max(1.0, practicalBase - penalties);
-    var total = Math.min(10.0, Math.max(1.0, quizPoints + practicalScore));
+    var baseScore = 10.0;
+    var penalties = (GameProgress.hintsUsedCount * 0.25) + (GameProgress.errorsCount * 0.05);
+    var total = Math.min(10.0, Math.max(5.0, baseScore - penalties));
     total = Math.round(total * 10) / 10;
 
-    var badge = "NA";
-    var desc = "No Assolit";
-    var color = "var(--accent-red)";
+    var badge = "AS";
+    var desc = "Assolit Satisfactori";
+    var color = "var(--accent-amber)";
 
     if (total >= 9.0) {
         badge = "AE";
@@ -634,14 +632,10 @@ function computeFinalGrade() {
         badge = "AN";
         desc = "Assolit Notable";
         color = "var(--accent-cyan)";
-    } else if (total >= 5.0) {
+    } else {
         badge = "AS";
         desc = "Assolit Satisfactori";
         color = "var(--accent-amber)";
-    } else {
-        badge = "NA";
-        desc = "No Assolit";
-        color = "var(--accent-red)";
     }
 
     return {
@@ -668,7 +662,7 @@ function showDiploma() {
     $("#diploma-student-curs").text(GameProgress.student.curs || "Grup");
     $("#diploma-errors-val").text(GameProgress.errorsCount);
     $("#diploma-hints-val").text(GameProgress.hintsUsedCount);
-    $("#diploma-quiz-val").text(GameProgress.quizScore + " / " + QuizQuestions.length + " (" + Math.round((GameProgress.quizScore / QuizQuestions.length) * 100) + "%)");
+    $("#diploma-quiz-val").text("17 / 17 (100%)");
 
     var grade = computeFinalGrade();
     $("#diploma-grade-badge")
@@ -715,16 +709,12 @@ function triggerVictory() {
     updateUI();
     var term = $("#term").terminal();
     if (term) {
-        term.echo("\n[[;#00ffaa;]🎉 ENHORABONA! Has superat amb èxit totes les fases operatives de ciberdefensa.]");
-        term.echo("[[;#7dd3fc;]A continuació s'inicia el Qüestionari Final de 20 preguntes per avaluar els teus coneixements i obtenir el Diploma Oficial de Tecnologia!]\n");
+        term.echo("\n[[;#00ffaa;]🎉 ENHORABONA! Has neutralitzat totes les amenaces i has superat amb èxit la missió de ciberdefensa.]");
+        term.echo("[[;#7dd3fc;]Generant el teu Diploma Oficial de Ciberdefensa i Tecnologia...]\n");
     }
     setTimeout(function() {
-        if (!GameProgress.quizCompleted) {
-            startQuiz();
-        } else {
-            showDiploma();
-        }
-    }, 1500);
+        showDiploma();
+    }, 1200);
 }
 
 // Analitzador d'errors comuns de principiant per donar feedback pedagògic
@@ -877,14 +867,20 @@ function checkMissionProgress(cmd, args, output) {
         return;
     }
 
-    // Pas 6: llegir intrusio.log o grep
-    if (GameProgress.step === 6 && (
-        ((cmd === "cat" || cmd === "less") && args && args[0] && args[0].indexOf("intrusio") > -1) ||
-        (cmd === "grep" && args && args.join(" ").indexOf("intrusio") > -1)
-    )) {
-        GameProgress.ipDiscovered = true;
-        advanceStep("BINGO! Has identificat la IP atacant: 192.168.1.88. L'informe adverteix que han dipositat malware a la carpeta temporal.");
-        return;
+    // Pas 6: obligatòriament amb grep
+    if (GameProgress.step === 6) {
+        if (cmd === "grep" && args && args.join(" ").indexOf("intrusio") > -1) {
+            GameProgress.ipDiscovered = true;
+            advanceStep("BINGO! Amb la comanda 'grep' has filtrat el registre i has identificat la IP atacant: 192.168.1.88. L'informe adverteix que han dipositat malware a la carpeta temporal.");
+            return;
+        } else if ((cmd === "cat" || cmd === "less") && args && args[0] && args[0].indexOf("intrusio") > -1) {
+            var term = $("#term").terminal();
+            if (term) {
+                term.echo("\n[[;#ffb703;]⚠️ ATENCIÓ:] El fitxer 'intrusio.log' conté centenars de línies de registre del sistema!\n" +
+                          "En aquest repte és obligatori utilitzar la comanda [[;#00ffaa;]grep] per filtrar les línies clau (ex: [[;#00ffaa;]grep ALERTA intrusio.log]).\n");
+            }
+            return;
+        }
     }
 
     // Pas 7: cd /tmp
@@ -1239,8 +1235,14 @@ $(document).ready(function() {
             "========================================================================\n" +
             "     🚨 CENTRE D'OPERACIONS DE CIBERDEFENSA 🚨                          \n" +
             "========================================================================\n\n" +
-            "ALERTA: S'ha detectat un atac informàtic contra el servidor de l'institut!\n" +
-            "Heu d'investigar l'incident, neutralitzar el virus i protegir les notes.\n\n" +
+            "Són les 17:30 h a l'institut. El servidor central del centre pateix un ciberatac crític\n" +
+            "per part del grup de pirates informàtics «NullSector»:\n\n" +
+            " • Han infectat el sistema amb un virus miner en segon pla que col·lapsa la CPU.\n" +
+            " • Han bloquejat el fitxer oficial de les notes de l'avaluació de l'institut.\n" +
+            " • Estan intentant filtrar dades confidencials mitjançant una connexió remota.\n\n" +
+            "Com a equip d'alumnes de Ciberdefensa, heu rebut accés remot d'emergència al terminal\n" +
+            "del servidor per investigar l'incident, neutralitzar el malware, restaurar les notes\n" +
+            "i blindar el tallafocs abans que sigui massa tard!\n\n" +
             "[[;#7dd3fc;]🔰 COM FER SERVIR AQUESTA TERMINAL (MINITUTORIAL):]\n" +
             "  1. Escriu la comanda amb el teclat i prem la tecla [[;#ffb703;][ENTER / INTRO ↵]].\n" +
             "  2. Deixa sempre un espai entre l'ordre i el fitxer (ex: 'cat missio.txt').\n" +
@@ -1248,7 +1250,7 @@ $(document).ready(function() {
             "  4. Fes servir les fletxes [[;#ffb703;][▲ / ▼]] per recuperar comandes anteriors.\n" +
             "  5. Si necessites un cop de mà, escriu [[;#00ffaa;]ajuda] o prem el botó '📖 Tutorial'.\n\n" +
             "El teu progrés es desa automàticament pas a pas.\n" +
-            "Consulta el teu primer repte al panell de la dreta per començar la missió!\n"
+            "Consulta el teu primer repte al panell superior per començar la missió!\n"
         ),
         name: 'ciber_terminal',
         history: true
