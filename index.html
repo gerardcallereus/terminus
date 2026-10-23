@@ -48,16 +48,17 @@
       </div>
     </header>
 
-    <!-- 1. Barra Superior d'Objectiu de la Missió (Ocupa tota l'amplada horitzontal) -->
+    <!-- 1. Barra Superior Unificada (100% horitzontal): Objectiu de la Missió + ⚡ Instrucció del Repte -->
     <section id="top-mission-bar" class="top-mission-bar">
-      <div class="mission-bar-left">
-        <div class="mission-bar-headline">
+      <!-- Bloc Esquerre: Objectiu de la Missió i Context Pedagògic -->
+      <div class="mission-col-left">
+        <div class="mission-header-line">
           <span id="mission-phase-badge" class="mission-phase">FASE 1: DIAGNÒSTIC INICIAL</span>
-          <span class="mission-top-title">
-            <span class="mission-top-icon">🎯</span>
-            <span class="mission-top-label">Objectiu de la Missió:</span>
+          <div class="mission-heading-wrap">
+            <span class="mission-heading-icon">🎯</span>
+            <span class="mission-heading-label">Objectiu:</span>
             <strong id="mission-title" class="mission-heading">On som i què ha passat?</strong>
-          </span>
+          </div>
         </div>
         <div class="pedagogy-inline">
           <span class="pedagogy-pill">💡 Per què ho fem?</span>
@@ -65,7 +66,25 @@
         </div>
       </div>
 
-      <div class="mission-bar-right">
+      <!-- Bloc Central: ⚡ Instrucció del Repte Actual i Pistes Integrades -->
+      <div class="mission-col-center">
+        <div class="challenge-top-box">
+          <div class="challenge-instruction-row">
+            <span class="task-badge">⚡ Repte Actual:</span>
+            <span id="task-instruction" class="task-instruction">Esbrina la teva ubicació exacta al servidor central de l'institut.</span>
+            <button id="btn-toggle-hint" class="btn-hint" type="button">
+              <span>💡 Demanar Pista</span>
+            </button>
+          </div>
+          <div id="hint-display-box" class="hint-display-box" style="display:none;">
+            <span id="hint-level-tag" class="hint-step-tag">PISTA NIVELL 1 (Reflexió):</span>
+            <span id="hint-text">Pensa quina comanda bàsica de la teva guia serveix per 'imprimir el directori de treball' (té 3 lletres).</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bloc Dret: Rànquing i Progrés de Recuperació -->
+      <div class="mission-col-right">
         <div class="top-meta-badge">
           <span class="top-meta-label">Rànquing:</span>
           <span id="rank-val" class="hint-rank-val">CiberHacker d'Elit 🎖️</span>
@@ -82,31 +101,7 @@
       </div>
     </section>
 
-    <!-- 2. Barra de Comandes en una única fila (per no despistar) -->
-    <nav id="commands-bar" class="commands-bar" aria-label="Comandes essencials">
-      <div class="commands-bar-label">
-        <span class="cmd-icon">⚡</span>
-        <span>Comandes:</span>
-      </div>
-      <div class="commands-scroll-list">
-        <span class="cmd-pill" title="Print Working Directory: Mostra la ruta de la carpeta actual"><kbd>pwd</kbd><span>On soc?</span></span>
-        <span class="cmd-pill" title="List: Llista fitxers i carpetes"><kbd>ls</kbd><span>Llista</span></span>
-        <span class="cmd-pill" title="Change Directory: Entra a una carpeta"><kbd>cd &lt;carpeta&gt;</kbd><span>Entra</span></span>
-        <span class="cmd-pill" title="Pujar de nivell: Torna enrere a la carpeta anterior"><kbd>cd ..</kbd><span>Pujar</span></span>
-        <span class="cmd-pill" title="Concatenate: Llegeix un fitxer de text"><kbd>cat &lt;fitxer&gt;</kbd><span>Llegeix</span></span>
-        <span class="cmd-pill" title="Cerca text clau dins d'un fitxer"><kbd>grep &lt;text&gt; &lt;fitxer&gt;</kbd><span>Cerca text</span></span>
-        <span class="cmd-pill" title="Process Status: Llista els processos actius"><kbd>ps</kbd><span>Processos</span></span>
-        <span class="cmd-pill" title="Kill: Atura un procés o virus pel PID"><kbd>kill &lt;PID&gt;</kbd><span>Atura virus</span></span>
-        <span class="cmd-pill" title="Remove: Esborra un fitxer maliciós"><kbd>rm &lt;fitxer&gt;</kbd><span>Esborra</span></span>
-        <span class="cmd-pill" title="Make Directory: Crea una carpeta nova"><kbd>mkdir &lt;nom&gt;</kbd><span>Crea carpeta</span></span>
-        <span class="cmd-pill" title="Copy: Copia o restaura un fitxer"><kbd>cp &lt;orig&gt; &lt;dest&gt;</kbd><span>Copia</span></span>
-        <span class="cmd-pill" title="Escàner de xarxa: Mostra equips connectats"><kbd>scan</kbd><span>Escàner</span></span>
-        <span class="cmd-pill" title="Tallafocs: Bloqueja una IP atacant"><kbd>firewall block &lt;IP&gt;</kbd><span>Tallafocs</span></span>
-        <span class="cmd-pill" title="Ajuda: Demana una pista a la terminal"><kbd>ajuda</kbd><span>Pista</span></span>
-      </div>
-    </nav>
-
-    <!-- 3. Contingut Principal Dividit -->
+    <!-- 2. Contingut Principal Dividit: Terminal a l'esquerra, Eines de Suport a la dreta -->
     <main id="main-container">
       <!-- Columna Esquerra: Terminal Interactiva -->
       <section id="terminal-section">
@@ -121,34 +116,106 @@
         <div id="term"></div>
       </section>
 
-      <!-- Columna Dreta: Instruccions i Arbre (Primer Instruccions, després Arbre) -->
+      <!-- Columna Dreta: Explorador de Carpetes i Guia de Comandes amb intercanviador -->
       <section id="dashboard-section">
-        <!-- Targeta 1 (Primer): Instruccions del Repte actual -->
-        <div class="dash-card mission-task-card">
-          <div class="card-title">⚡ Instrucció del Repte</div>
-          <div class="mission-task-box">
-            <div id="task-instruction" class="task-instruction">Esbrina la teva ubicació exacta al servidor central de l'institut.</div>
-            
-            <div class="hint-actions">
-              <button id="btn-toggle-hint" class="btn-hint" type="button">
-                <span>💡 Demanar Pista</span>
+        <div class="dash-card side-tools-card">
+          <!-- Capçalera amb pestanyes i botó d'intercanvi ràpid -->
+          <div class="tools-card-header">
+            <div class="tab-header-nav">
+              <button type="button" class="tab-nav-btn active" id="tab-btn-tree" data-tab="view-tree">
+                📂 Explorador
+              </button>
+              <button type="button" class="tab-nav-btn" id="tab-btn-commands" data-tab="view-commands">
+                📖 Guia de Comandes
               </button>
             </div>
+            <button id="btn-toggle-view" class="btn-toggle-view" type="button" title="Intercanvia entre l'Explorador i la Guia de comandes">
+              <span>🔄</span> <span id="btn-toggle-view-text">Veure Comandes</span>
+            </button>
+          </div>
 
-            <div id="hint-display-box" class="hint-display-box">
-              <span id="hint-level-tag" class="hint-step-tag">PISTA NIVELL 1 (Reflexió):</span>
-              <div id="hint-text">Pensa quina comanda bàsica de la teva guia serveix per 'imprimir el directori de treball' (té 3 lletres).</div>
+          <!-- Vista 1: Explorador de carpetes (actiu per defecte) -->
+          <div id="view-tree" class="view-pane active">
+            <p class="tab-subtext">
+              La carpeta ressaltada amb la fletxa verda indica la teva posició actual en tot moment:
+            </p>
+            <div id="tree-viewer"></div>
+          </div>
+
+          <!-- Vista 2: Guia de comandes completa -->
+          <div id="view-commands" class="view-pane" style="display: none;">
+            <p class="tab-subtext">
+              Clica qualsevol comanda per inserir-la directament a la terminal:
+            </p>
+            <div class="cheatsheet-table-wrap">
+              <table class="cheatsheet-table">
+                <thead>
+                  <tr>
+                    <th>Comanda</th>
+                    <th>Funció</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="cmd-clickable" data-cmd="pwd">
+                    <td><span class="cmd-badge">pwd</span></td>
+                    <td>On soc ara mateix a l'ordinador? (Directori actual)</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="ls">
+                    <td><span class="cmd-badge">ls</span></td>
+                    <td>Llista els fitxers i carpetes del davant.</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="cd ">
+                    <td><span class="cmd-badge">cd &lt;carpeta&gt;</span></td>
+                    <td>Mou-te a una altra carpeta (ex: <code>cd /var/log</code>).</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="cd ..">
+                    <td><span class="cmd-badge">cd ..</span></td>
+                    <td>Torna enrere a la carpeta anterior (pujar nivell).</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="cat ">
+                    <td><span class="cmd-badge">cat &lt;fitxer&gt;</span></td>
+                    <td>Llegeix el contingut d'un arxiu de text.</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="grep ">
+                    <td><span class="cmd-badge">grep &lt;text&gt; &lt;fitxer&gt;</span></td>
+                    <td>Cerca paraules o línies clau dins d'un fitxer gran.</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="ps">
+                    <td><span class="cmd-badge">ps</span></td>
+                    <td>Llista els processos i programes actius a la memòria.</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="kill ">
+                    <td><span class="cmd-badge">kill &lt;PID&gt;</span></td>
+                    <td>Atura immediatament un virus pel seu número PID.</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="rm ">
+                    <td><span class="cmd-badge">rm &lt;fitxer&gt;</span></td>
+                    <td>Elimina un fitxer maliciós definitivament del disc.</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="mkdir ">
+                    <td><span class="cmd-badge">mkdir &lt;nom&gt;</span></td>
+                    <td>Crea una carpeta nova per protegir o endreçar dades.</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="cp ">
+                    <td><span class="cmd-badge">cp &lt;orig&gt; &lt;dest&gt;</span></td>
+                    <td>Copia o restaura un fitxer a un altre directori.</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="scan">
+                    <td><span class="cmd-badge">scan</span></td>
+                    <td>Escàner: mostra els equips connectats a la xarxa local.</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="firewall block ">
+                    <td><span class="cmd-badge">firewall block &lt;IP&gt;</span></td>
+                    <td>Tallafocs: bloqueja l'accés a una adreça IP atacant.</td>
+                  </tr>
+                  <tr class="cmd-clickable" data-cmd="ajuda">
+                    <td><span class="cmd-badge">ajuda</span></td>
+                    <td>Demana una pista d'ajuda a la terminal.</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
-
-        <!-- Targeta 2 (Segon): Explorador de Carpetes (Arbre) -->
-        <div class="dash-card tree-card">
-          <div class="card-title">📂 Explorador de Carpetes</div>
-          <p class="tab-subtext">
-            La carpeta ressaltada amb la fletxa verda indica la teva posició actual en tot moment:
-          </p>
-          <div id="tree-viewer"></div>
         </div>
       </section>
     </main>

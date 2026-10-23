@@ -30,9 +30,10 @@ body {
     background-color: var(--bg-dark);
     color: var(--text-main);
     font-family: var(--font-ui);
-    letter-spacing: 0.025em;
-    word-spacing: 0.05em;
-    line-height: 1.6;
+    letter-spacing: 0.035em;
+    word-spacing: 0.08em;
+    line-height: 1.7;
+    font-size: 15.5px;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     height: 100vh;
@@ -43,50 +44,58 @@ body {
 
 /* Ajust de mida de text per a confort visual i pantalles petites */
 body.size-large {
-    font-size: 112%;
+    font-size: 114%;
 }
 body.size-large #term {
-    font-size: 16.5px !important;
+    font-size: 17px !important;
+    line-height: 1.7 !important;
 }
 body.size-large .task-instruction {
-    font-size: 16.5px !important;
+    font-size: 17px !important;
+    line-height: 1.7 !important;
 }
 body.size-large .card-title {
-    font-size: 14.5px !important;
+    font-size: 15px !important;
 }
 body.size-large .pedagogy-box {
-    font-size: 14px !important;
+    font-size: 14.5px !important;
 }
 body.size-large .hint-display-box {
-    font-size: 14px !important;
+    font-size: 15px !important;
+    line-height: 1.7 !important;
 }
-body.size-large .cmd-pill {
-    font-size: 13px !important;
+body.size-large .cheatsheet-table {
+    font-size: 14.5px !important;
+    line-height: 1.65 !important;
 }
 body.size-large .mission-heading {
     font-size: 16.5px !important;
 }
 
 body.size-xlarge {
-    font-size: 122%;
+    font-size: 126%;
 }
 body.size-xlarge #term {
-    font-size: 18px !important;
+    font-size: 18.5px !important;
+    line-height: 1.75 !important;
 }
 body.size-xlarge .task-instruction {
-    font-size: 18px !important;
+    font-size: 18.5px !important;
+    line-height: 1.75 !important;
 }
 body.size-xlarge .card-title {
-    font-size: 15.5px !important;
+    font-size: 16px !important;
 }
 body.size-xlarge .pedagogy-box {
-    font-size: 15px !important;
+    font-size: 15.5px !important;
 }
 body.size-xlarge .hint-display-box {
-    font-size: 15px !important;
+    font-size: 16px !important;
+    line-height: 1.75 !important;
 }
-body.size-xlarge .cmd-pill {
-    font-size: 14px !important;
+body.size-xlarge .cheatsheet-table {
+    font-size: 15.5px !important;
+    line-height: 1.7 !important;
 }
 body.size-xlarge .mission-heading {
     font-size: 18px !important;
@@ -199,7 +208,7 @@ body.size-xlarge .mission-heading {
     color: var(--accent-cyan);
 }
 
-/* 1. Barra Superior d'Objectiu de la Missió (ocupa tota l'amplada horitzontal) */
+/* 1. Barra Superior d'Objectiu de la Missió i Repte Actual (ocupa el 100% horitzontal) */
 .top-mission-bar {
     background: #0f1624;
     border-bottom: 1px solid var(--border-color);
@@ -213,7 +222,7 @@ body.size-xlarge .mission-heading {
     z-index: 90;
 }
 
-.mission-bar-left {
+.mission-col-left {
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -221,38 +230,36 @@ body.size-xlarge .mission-heading {
     flex: 1;
 }
 
-.mission-bar-headline {
+.mission-header-line {
     display: flex;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
 }
 
-.mission-top-title {
+.mission-heading-wrap {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 14.5px;
-    color: #ffffff;
     min-width: 0;
 }
 
-.mission-top-icon {
+.mission-heading-icon {
     font-size: 16px;
 }
 
-.mission-top-label {
+.mission-heading-label {
     color: var(--accent-cyan);
     font-weight: 700;
     font-family: var(--font-mono);
-    font-size: 12.5px;
+    font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
 }
 
 .mission-heading {
-    font-size: 15px;
+    font-size: 14.5px;
     font-weight: 700;
     color: #ffffff;
     white-space: nowrap;
@@ -264,8 +271,8 @@ body.size-xlarge .mission-heading {
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 12.5px;
-    line-height: 1.4;
+    font-size: 12px;
+    line-height: 1.5;
     min-width: 0;
 }
 
@@ -289,10 +296,57 @@ body.size-xlarge .mission-heading {
     text-overflow: ellipsis;
 }
 
-.mission-bar-right {
+/* Bloc Central: ⚡ Instrucció del Repte Actual integrat */
+.mission-col-center {
+    flex: 1.35;
+    min-width: 0;
+}
+
+.challenge-top-box {
+    background: #0b111c;
+    border: 1px solid #1e2c40;
+    border-radius: 8px;
+    padding: 7px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.challenge-instruction-row {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 10px;
+}
+
+.task-badge {
+    background: rgba(251, 191, 36, 0.18);
+    color: var(--accent-amber);
+    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: 0.5px;
+}
+
+.task-instruction {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    line-height: 1.55;
+    letter-spacing: 0.03em;
+    word-spacing: 0.05em;
+    flex: 1;
+    min-width: 0;
+}
+
+/* Bloc Dret: Rànquing i Progrés */
+.mission-col-right {
+    display: flex;
+    align-items: center;
+    gap: 14px;
     flex-shrink: 0;
 }
 
@@ -311,98 +365,7 @@ body.size-xlarge .mission-heading {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    width: 170px;
-}
-
-/* 2. Barra de comandes en una única fila (per no despistar) */
-.commands-bar {
-    background: #0b0f19;
-    border-bottom: 1px solid var(--border-color);
-    padding: 6px 14px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-    overflow-x: auto;
-    white-space: nowrap;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border-color) transparent;
-    z-index: 80;
-}
-
-.commands-bar::-webkit-scrollbar {
-    height: 4px;
-}
-.commands-bar::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 2px;
-}
-
-.commands-bar-label {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 11.5px;
-    font-weight: 700;
-    font-family: var(--font-mono);
-    color: var(--accent-amber);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    padding-right: 8px;
-    border-right: 1px solid var(--border-color);
-    flex-shrink: 0;
-}
-
-.commands-scroll-list {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-}
-
-.cmd-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: #131b2a;
-    border: 1px solid #202b3d;
-    padding: 3px 9px;
-    border-radius: 6px;
-    font-size: 12px;
-    color: #e2e8f0;
-    cursor: pointer;
-    user-select: none;
-    transition: all 0.15s ease;
-    white-space: nowrap;
-    flex-shrink: 0;
-}
-
-.cmd-pill:hover {
-    background: #1a2538;
-    border-color: var(--accent-cyan);
-    color: #ffffff;
-    transform: translateY(-1px);
-}
-
-.cmd-pill kbd {
-    background: #090e18;
-    color: var(--accent-cyan);
-    border: 1px solid rgba(56, 189, 248, 0.35);
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    font-size: 11.5px;
-}
-
-.cmd-pill span {
-    color: var(--text-muted);
-    font-size: 11.5px;
-}
-
-.cmd-pill:hover span {
-    color: #cbd5e1;
+    width: 150px;
 }
 
 /* 3. Contingut principal dividit en dues columnes */
@@ -487,10 +450,10 @@ body.size-xlarge .mission-heading {
     background-color: var(--bg-dark);
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
     padding: 12px 14px;
     gap: 12px;
     min-width: 0;
+    overflow: hidden;
 }
 
 /* Targetes del Dashboard */
@@ -506,15 +469,54 @@ body.size-xlarge .mission-heading {
     transition: border-color 0.2s;
 }
 
-.mission-task-card {
+.side-tools-card {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+.tools-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
     flex-shrink: 0;
 }
 
-.tree-card {
-    flex: 1;
-    min-height: 220px;
+.btn-toggle-view {
+    background: #0e1726;
+    border: 1px solid var(--border-color);
+    color: var(--accent-cyan);
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-family: var(--font-ui);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.btn-toggle-view:hover {
+    background: #18253a;
+    border-color: var(--accent-cyan);
+    color: #ffffff;
+    box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+}
+
+.view-pane {
     display: flex;
     flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease;
 }
 
 .dash-card:hover {
@@ -823,7 +825,9 @@ body.size-xlarge .mission-heading {
 
 /* Taula ràpida de comandes amb scroll segur */
 .cheatsheet-table-wrap {
-    max-height: 240px;
+    flex: 1;
+    min-height: 0;
+    max-height: none;
     overflow-y: auto;
     border-radius: 6px;
     border: 1px solid #1c2538;
@@ -833,18 +837,19 @@ body.size-xlarge .mission-heading {
 .cheatsheet-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
-    line-height: 1.5;
+    font-size: 13.5px;
+    line-height: 1.65;
+    letter-spacing: 0.025em;
 }
 
 .cheatsheet-table th {
     text-align: left;
-    padding: 8px 10px;
+    padding: 10px 12px;
     border-bottom: 1px solid var(--border-color);
     background: #111a2c;
     color: var(--accent-cyan);
     font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 700;
     position: sticky;
     top: 0;
@@ -852,28 +857,35 @@ body.size-xlarge .mission-heading {
 }
 
 .cheatsheet-table td {
-    padding: 7px 10px;
+    padding: 8px 12px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    vertical-align: middle;
 }
 
 .cheatsheet-table tr:nth-child(even) td {
     background: rgba(255, 255, 255, 0.02);
 }
 
-.cheatsheet-table tr:hover td {
-    background: rgba(56, 189, 248, 0.06);
+.cheatsheet-table tr.cmd-clickable {
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.cheatsheet-table tr.cmd-clickable:hover td {
+    background: rgba(56, 189, 248, 0.12);
 }
 
 .cmd-badge {
     font-family: var(--font-mono);
     font-weight: 700;
     color: var(--accent-green);
-    background: rgba(52, 211, 153, 0.12);
-    border: 1px solid rgba(52, 211, 153, 0.3);
-    padding: 2px 7px;
+    background: rgba(52, 211, 153, 0.14);
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    padding: 3px 8px;
     border-radius: 4px;
-    font-size: 12px;
+    font-size: 12.5px;
     display: inline-block;
+    white-space: nowrap;
 }
 
 /* Badge de l'estudiant a la capçalera */
@@ -1683,12 +1695,16 @@ kbd {
 
     .top-mission-bar {
         padding: 6px 14px;
-        gap: 12px;
+        gap: 10px;
     }
 
-    .commands-bar {
-        padding: 5px 12px;
-        gap: 8px;
+    .challenge-top-box {
+        padding: 5px 10px;
+    }
+
+    .task-instruction {
+        font-size: 14px;
+        line-height: 1.5;
     }
 
     #terminal-section {

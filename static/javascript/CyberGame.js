@@ -1259,22 +1259,40 @@ $(document).ready(function() {
         $("#tutorial-modal").fadeIn(250);
     }
 
-    // Gestió de les pestanyes del tauler d'eines (si n'hi ha)
+    // Gestió d'intercanvi entre l'Explorador de Carpetes i la Guia de Comandes
+    function switchRightPanel(viewId) {
+        if (viewId === "view-commands") {
+            $("#view-tree").hide();
+            $("#view-commands").show();
+            $("#tab-btn-tree").removeClass("active");
+            $("#tab-btn-commands").addClass("active");
+            $("#btn-toggle-view-text").text("Veure Explorador");
+        } else {
+            $("#view-commands").hide();
+            $("#view-tree").show();
+            $("#tab-btn-commands").removeClass("active");
+            $("#tab-btn-tree").addClass("active");
+            $("#btn-toggle-view-text").text("Veure Comandes");
+        }
+    }
+
     $(".tab-nav-btn").click(function() {
         var targetTab = $(this).attr("data-tab");
-        $(".tab-nav-btn").removeClass("active");
-        $(this).addClass("active");
-        $(".tab-pane").hide();
-        $("#" + targetTab).show();
+        switchRightPanel(targetTab);
     });
 
-    // Inserció ràpida de comandes al fer clic a una píndola de la barra de comandes
-    $(document).on("click", ".cmd-pill", function() {
-        var rawText = $(this).find("kbd").text().trim();
-        var baseCmd = rawText.split(" <")[0];
+    $("#btn-toggle-view").click(function() {
+        var isTreeVisible = $("#view-tree").is(":visible");
+        switchRightPanel(isTreeVisible ? "view-commands" : "view-tree");
+    });
+
+    // Inserció ràpida de comandes al fer clic sobre una fila de la guia de comandes
+    $(document).on("click", ".cmd-clickable", function() {
+        var cmd = $(this).attr("data-cmd") || $(this).find(".cmd-badge").text().trim();
+        var baseCmd = cmd.split(" <")[0];
         var term = $("#term").terminal();
         if (term) {
-            term.set_command(baseCmd + (rawText.indexOf("<") > -1 ? " " : ""));
+            term.set_command(baseCmd);
             term.focus();
         }
     });
