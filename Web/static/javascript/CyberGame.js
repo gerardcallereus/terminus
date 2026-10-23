@@ -1259,13 +1259,24 @@ $(document).ready(function() {
         $("#tutorial-modal").fadeIn(250);
     }
 
-    // Gestió de les pestanyes del tauler d'eines (Explorador i Guia)
+    // Gestió de les pestanyes del tauler d'eines (si n'hi ha)
     $(".tab-nav-btn").click(function() {
         var targetTab = $(this).attr("data-tab");
         $(".tab-nav-btn").removeClass("active");
         $(this).addClass("active");
         $(".tab-pane").hide();
         $("#" + targetTab).show();
+    });
+
+    // Inserció ràpida de comandes al fer clic a una píndola de la barra de comandes
+    $(document).on("click", ".cmd-pill", function() {
+        var rawText = $(this).find("kbd").text().trim();
+        var baseCmd = rawText.split(" <")[0];
+        var term = $("#term").terminal();
+        if (term) {
+            term.set_command(baseCmd + (rawText.indexOf("<") > -1 ? " " : ""));
+            term.focus();
+        }
     });
 
     // Control d'ajust de mida de text (accessible i còmode per a qualsevol pantalla)

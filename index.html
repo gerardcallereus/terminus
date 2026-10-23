@@ -48,7 +48,65 @@
       </div>
     </header>
 
-    <!-- Contingut Principal Dividit -->
+    <!-- 1. Barra Superior d'Objectiu de la Missió (Ocupa tota l'amplada horitzontal) -->
+    <section id="top-mission-bar" class="top-mission-bar">
+      <div class="mission-bar-left">
+        <div class="mission-bar-headline">
+          <span id="mission-phase-badge" class="mission-phase">FASE 1: DIAGNÒSTIC INICIAL</span>
+          <span class="mission-top-title">
+            <span class="mission-top-icon">🎯</span>
+            <span class="mission-top-label">Objectiu de la Missió:</span>
+            <strong id="mission-title" class="mission-heading">On som i què ha passat?</strong>
+          </span>
+        </div>
+        <div class="pedagogy-inline">
+          <span class="pedagogy-pill">💡 Per què ho fem?</span>
+          <span id="mission-pedagogy" class="pedagogy-text">Tota sessió de ciberseguretat comença per orientar-se a la màquina i llegir l'informe d'incidència amb ordres bàsiques de navegació.</span>
+        </div>
+      </div>
+
+      <div class="mission-bar-right">
+        <div class="top-meta-badge">
+          <span class="top-meta-label">Rànquing:</span>
+          <span id="rank-val" class="hint-rank-val">CiberHacker d'Elit 🎖️</span>
+        </div>
+        <div class="top-progress-box">
+          <div class="progress-header">
+            <span>Recuperació:</span>
+            <span id="progress-percentage">0%</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div id="progress-bar" class="progress-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Barra de Comandes en una única fila (per no despistar) -->
+    <nav id="commands-bar" class="commands-bar" aria-label="Comandes essencials">
+      <div class="commands-bar-label">
+        <span class="cmd-icon">⚡</span>
+        <span>Comandes:</span>
+      </div>
+      <div class="commands-scroll-list">
+        <span class="cmd-pill" title="Print Working Directory: Mostra la ruta de la carpeta actual"><kbd>pwd</kbd><span>On soc?</span></span>
+        <span class="cmd-pill" title="List: Llista fitxers i carpetes"><kbd>ls</kbd><span>Llista</span></span>
+        <span class="cmd-pill" title="Change Directory: Entra a una carpeta"><kbd>cd &lt;carpeta&gt;</kbd><span>Entra</span></span>
+        <span class="cmd-pill" title="Pujar de nivell: Torna enrere a la carpeta anterior"><kbd>cd ..</kbd><span>Pujar</span></span>
+        <span class="cmd-pill" title="Concatenate: Llegeix un fitxer de text"><kbd>cat &lt;fitxer&gt;</kbd><span>Llegeix</span></span>
+        <span class="cmd-pill" title="Cerca text clau dins d'un fitxer"><kbd>grep &lt;text&gt; &lt;fitxer&gt;</kbd><span>Cerca text</span></span>
+        <span class="cmd-pill" title="Process Status: Llista els processos actius"><kbd>ps</kbd><span>Processos</span></span>
+        <span class="cmd-pill" title="Kill: Atura un procés o virus pel PID"><kbd>kill &lt;PID&gt;</kbd><span>Atura virus</span></span>
+        <span class="cmd-pill" title="Remove: Esborra un fitxer maliciós"><kbd>rm &lt;fitxer&gt;</kbd><span>Esborra</span></span>
+        <span class="cmd-pill" title="Make Directory: Crea una carpeta nova"><kbd>mkdir &lt;nom&gt;</kbd><span>Crea carpeta</span></span>
+        <span class="cmd-pill" title="Copy: Copia o restaura un fitxer"><kbd>cp &lt;orig&gt; &lt;dest&gt;</kbd><span>Copia</span></span>
+        <span class="cmd-pill" title="Escàner de xarxa: Mostra equips connectats"><kbd>scan</kbd><span>Escàner</span></span>
+        <span class="cmd-pill" title="Tallafocs: Bloqueja una IP atacant"><kbd>firewall block &lt;IP&gt;</kbd><span>Tallafocs</span></span>
+        <span class="cmd-pill" title="Ajuda: Demana una pista a la terminal"><kbd>ajuda</kbd><span>Pista</span></span>
+      </div>
+    </nav>
+
+    <!-- 3. Contingut Principal Dividit -->
     <main id="main-container">
       <!-- Columna Esquerra: Terminal Interactiva -->
       <section id="terminal-section">
@@ -63,30 +121,18 @@
         <div id="term"></div>
       </section>
 
-      <!-- Columna Dreta: Quadre de Comandament i Objectius -->
+      <!-- Columna Dreta: Instruccions i Arbre (Primer Instruccions, després Arbre) -->
       <section id="dashboard-section">
-        <!-- Targeta de la Missió Actual -->
-        <div class="dash-card">
-          <div class="card-title">🎯 Objectiu de la Missió</div>
-          <span id="mission-phase-badge" class="mission-phase">FASE 1: DIAGNÒSTIC INICIAL</span>
-          <div id="mission-title" class="mission-heading">On som i què ha passat?</div>
-
-          <div class="pedagogy-box">
-            <div class="pedagogy-title">💡 Per què fem això?</div>
-            <div id="mission-pedagogy">Tota sessió de ciberseguretat comença per orientar-se a la màquina i llegir l'informe d'incidència amb ordres bàsiques de navegació.</div>
-          </div>
-
+        <!-- Targeta 1 (Primer): Instruccions del Repte actual -->
+        <div class="dash-card mission-task-card">
+          <div class="card-title">⚡ Instrucció del Repte</div>
           <div class="mission-task-box">
-            <div class="task-label">Repte Actual:</div>
             <div id="task-instruction" class="task-instruction">Esbrina la teva ubicació exacta al servidor central de l'institut.</div>
             
             <div class="hint-actions">
-              <button id="btn-toggle-hint" class="btn-hint">
+              <button id="btn-toggle-hint" class="btn-hint" type="button">
                 <span>💡 Demanar Pista</span>
               </button>
-              <div class="hint-rank-badge">
-                Rànquing: <span id="rank-val" class="hint-rank-val">CiberHacker d'Elit 🎖️</span>
-              </div>
             </div>
 
             <div id="hint-display-box" class="hint-display-box">
@@ -94,123 +140,15 @@
               <div id="hint-text">Pensa quina comanda bàsica de la teva guia serveix per 'imprimir el directori de treball' (té 3 lletres).</div>
             </div>
           </div>
-
-          <div class="progress-container">
-            <div class="progress-header">
-              <span>Progrés de la recuperació:</span>
-              <span id="progress-percentage">0%</span>
-            </div>
-            <div class="progress-bar-bg">
-              <div id="progress-bar" class="progress-bar-fill"></div>
-            </div>
-          </div>
         </div>
 
-        <!-- Targeta d'Eines de Suport (Pestanyes per a màxim confort i espai) -->
-        <div class="dash-card dash-tools-card">
-          <div class="tab-header-nav">
-            <button type="button" class="tab-nav-btn active" data-tab="tab-tree">
-              📂 Explorador de Carpetes
-            </button>
-            <button type="button" class="tab-nav-btn" data-tab="tab-cheatsheet">
-              📖 Guia de Comandes
-            </button>
-          </div>
-
-          <!-- Pestanya 1: Explorador de carpetes -->
-          <div id="tab-tree" class="tab-pane active">
-            <p class="tab-subtext">
-              La carpeta ressaltada amb la fletxa verda indica la teva posició actual en tot moment:
-            </p>
-            <div id="tree-viewer"></div>
-          </div>
-
-          <!-- Pestanya 2: Guia de comandes essencials -->
-          <div id="tab-cheatsheet" class="tab-pane" style="display: none;">
-            <div class="cheatsheet-table-wrap">
-              <table class="cheatsheet-table">
-                <thead>
-                  <tr>
-                    <th>Comanda</th>
-                    <th>Significat</th>
-                    <th>Funció</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td><span class="cmd-badge">pwd</span></td>
-                    <td>Print Working Directory</td>
-                    <td>On soc ara mateix a l'ordinador?</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">ls</span></td>
-                    <td>List</td>
-                    <td>Llista els fitxers i carpetes del davant.</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">cd &lt;lloc&gt;</span></td>
-                    <td>Change Directory</td>
-                    <td>Mou-te a una altra carpeta (ex: <code>cd /var/log</code>).</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">cd ..</span></td>
-                    <td>Pujar de nivell</td>
-                    <td>Torna enrere a la carpeta anterior.</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">cat &lt;fitxer&gt;</span></td>
-                    <td>Concatenate</td>
-                    <td>Llegeix el contingut d'un arxiu de text.</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">grep &lt;mot&gt; &lt;fitxer&gt;</span></td>
-                    <td>Filtre de cerca</td>
-                    <td>Cerca línies clau dins d'un fitxer gran.</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">ps</span></td>
-                    <td>Process Status</td>
-                    <td>Gestor de Tasques: llista els processos actius a la RAM, el consum de CPU i el seu PID.</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">kill &lt;PID&gt;</span></td>
-                    <td>Aturar procés</td>
-                    <td>Atura un programa o virus pel seu número PID.</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">rm &lt;fitxer&gt;</span></td>
-                    <td>Remove</td>
-                    <td>Esborra un fitxer definitivament.</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">mkdir &lt;nom&gt;</span></td>
-                    <td>Make Directory</td>
-                    <td>Crea una carpeta nova per endreçar dades.</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">cp &lt;orig&gt; &lt;dest&gt;</span></td>
-                    <td>Copy</td>
-                    <td>Copia o duplica un fitxer a un altre directori.</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">scan</span></td>
-                    <td>Escàner de xarxa</td>
-                    <td>Mostra els equips connectats a la xarxa local.</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">firewall block &lt;IP&gt;</span></td>
-                    <td>Tallafocs</td>
-                    <td>Bloqueja l'accés a una adreça IP atacant.</td>
-                  </tr>
-                  <tr>
-                    <td><span class="cmd-badge">ajuda</span> / <span class="cmd-badge">man</span></td>
-                    <td>Manual d'ajuda</td>
-                    <td>Demana una pista sobre la missió o comanda.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+        <!-- Targeta 2 (Segon): Explorador de Carpetes (Arbre) -->
+        <div class="dash-card tree-card">
+          <div class="card-title">📂 Explorador de Carpetes</div>
+          <p class="tab-subtext">
+            La carpeta ressaltada amb la fletxa verda indica la teva posició actual en tot moment:
+          </p>
+          <div id="tree-viewer"></div>
         </div>
       </section>
     </main>

@@ -60,8 +60,11 @@ body.size-large .pedagogy-box {
 body.size-large .hint-display-box {
     font-size: 14px !important;
 }
-body.size-large .cheatsheet-table {
+body.size-large .cmd-pill {
     font-size: 13px !important;
+}
+body.size-large .mission-heading {
+    font-size: 16.5px !important;
 }
 
 body.size-xlarge {
@@ -82,8 +85,11 @@ body.size-xlarge .pedagogy-box {
 body.size-xlarge .hint-display-box {
     font-size: 15px !important;
 }
-body.size-xlarge .cheatsheet-table {
+body.size-xlarge .cmd-pill {
     font-size: 14px !important;
+}
+body.size-xlarge .mission-heading {
+    font-size: 18px !important;
 }
 
 /* Capçalera superior */
@@ -193,11 +199,217 @@ body.size-xlarge .cheatsheet-table {
     color: var(--accent-cyan);
 }
 
-/* Contingut principal dividit en dues columnes */
+/* 1. Barra Superior d'Objectiu de la Missió (ocupa tota l'amplada horitzontal) */
+.top-mission-bar {
+    background: #0f1624;
+    border-bottom: 1px solid var(--border-color);
+    padding: 8px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    z-index: 90;
+}
+
+.mission-bar-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+    flex: 1;
+}
+
+.mission-bar-headline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.mission-top-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14.5px;
+    color: #ffffff;
+    min-width: 0;
+}
+
+.mission-top-icon {
+    font-size: 16px;
+}
+
+.mission-top-label {
+    color: var(--accent-cyan);
+    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.mission-heading {
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pedagogy-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    min-width: 0;
+}
+
+.pedagogy-pill {
+    background: rgba(56, 189, 248, 0.15);
+    color: var(--accent-cyan);
+    border: 1px solid rgba(56, 189, 248, 0.3);
+    padding: 1px 7px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.pedagogy-text {
+    color: #94a3b8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.mission-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+.top-meta-badge {
+    font-size: 11.5px;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    background: #141c2c;
+    border: 1px solid var(--border-color);
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+}
+
+.top-progress-box {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 170px;
+}
+
+/* 2. Barra de comandes en una única fila (per no despistar) */
+.commands-bar {
+    background: #0b0f19;
+    border-bottom: 1px solid var(--border-color);
+    padding: 6px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-color) transparent;
+    z-index: 80;
+}
+
+.commands-bar::-webkit-scrollbar {
+    height: 4px;
+}
+.commands-bar::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 2px;
+}
+
+.commands-bar-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11.5px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--accent-amber);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-right: 8px;
+    border-right: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.commands-scroll-list {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.cmd-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #131b2a;
+    border: 1px solid #202b3d;
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #e2e8f0;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.cmd-pill:hover {
+    background: #1a2538;
+    border-color: var(--accent-cyan);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.cmd-pill kbd {
+    background: #090e18;
+    color: var(--accent-cyan);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 11.5px;
+}
+
+.cmd-pill span {
+    color: var(--text-muted);
+    font-size: 11.5px;
+}
+
+.cmd-pill:hover span {
+    color: #cbd5e1;
+}
+
+/* 3. Contingut principal dividit en dues columnes */
 #main-container {
     display: flex;
     flex: 1;
-    height: calc(100vh - 52px);
+    min-height: 0;
     overflow: hidden;
 }
 
@@ -210,6 +422,7 @@ body.size-xlarge .cheatsheet-table {
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    min-width: 0;
 }
 
 .terminal-header {
@@ -275,8 +488,9 @@ body.size-xlarge .cheatsheet-table {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    padding: 14px 16px;
-    gap: 14px;
+    padding: 12px 14px;
+    gap: 12px;
+    min-width: 0;
 }
 
 /* Targetes del Dashboard */
@@ -284,12 +498,23 @@ body.size-xlarge .cheatsheet-table {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    padding: 16px;
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.3);
     transition: border-color 0.2s;
+}
+
+.mission-task-card {
+    flex-shrink: 0;
+}
+
+.tree-card {
+    flex: 1;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
 }
 
 .dash-card:hover {
@@ -501,7 +726,8 @@ body.size-xlarge .cheatsheet-table {
     font-family: var(--font-mono);
     font-size: 13px;
     line-height: 1.6;
-    max-height: 240px;
+    flex: 1;
+    min-height: 160px;
     overflow-y: auto;
     color: #cbd5e1;
 }
@@ -1451,7 +1677,18 @@ kbd {
     }
 
     #main-container {
-        height: calc(100vh - 48px);
+        flex: 1;
+        min-height: 0;
+    }
+
+    .top-mission-bar {
+        padding: 6px 14px;
+        gap: 12px;
+    }
+
+    .commands-bar {
+        padding: 5px 12px;
+        gap: 8px;
     }
 
     #terminal-section {
@@ -1465,8 +1702,8 @@ kbd {
     }
 
     .dash-card {
-        padding: 12px 14px;
-        gap: 9px;
+        padding: 11px 13px;
+        gap: 8px;
     }
 
     .card-title {
@@ -1475,18 +1712,18 @@ kbd {
     }
 
     .mission-heading {
-        font-size: 15px;
+        font-size: 14px;
     }
 
     .task-instruction {
-        font-size: 14.5px;
-        line-height: 1.55;
+        font-size: 14px;
+        line-height: 1.5;
     }
 
     .pedagogy-box {
-        font-size: 12.5px;
-        padding: 7px 11px;
-        line-height: 1.5;
+        font-size: 12px;
+        padding: 6px 10px;
+        line-height: 1.45;
     }
 
     .mission-task-box {
@@ -1495,7 +1732,9 @@ kbd {
     }
 
     #tree-viewer {
-        max-height: 165px;
+        flex: 1;
+        min-height: 140px;
+        max-height: none;
         font-size: 12px;
         padding: 8px 10px;
     }
