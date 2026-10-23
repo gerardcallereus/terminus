@@ -14,6 +14,11 @@
     <script type="text/javascript" src="./static/javascript/CyberFilesystem.js"></script>
     <script type="text/javascript" src="./static/javascript/CyberGame.js"></script>
 
+    <!-- Fonts d'alta llegibilitat -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- CSS -->
     <link href="./static/css/jquery.terminal.css" rel="stylesheet"/>
     <link href="./static/css/terminus.css" rel="stylesheet"/>
@@ -36,6 +41,7 @@
           <span class="status-dot"></span>
           <span>AMENAÇA: CRÍTICA</span>
         </div>
+        <button id="btn-toggle-text-size" class="btn-header" title="Canviar la mida del text">🔤 Mida text</button>
         <button id="btn-show-tutorial" class="btn-header" title="Com fer servir la terminal">📖 Tutorial Terminal</button>
         <button id="btn-show-diploma" class="btn-header" style="display:none;" title="Veure el teu diploma oficial">🏅 Diploma</button>
         <button id="btn-restart" class="btn-header" title="Reinicia la missió">🔄 Reiniciar</button>
@@ -100,99 +106,111 @@
           </div>
         </div>
 
-        <!-- Targeta de l'Arbre de Directoris Visual -->
-        <div class="dash-card">
-          <div class="card-title">📂 Explorador de Carpetes del Servidor (Temps Real)</div>
-          <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">
-            La carpeta ressaltada amb la fletxa verda indica la teva posició actual en tot moment:
-          </p>
-          <div id="tree-viewer"></div>
-        </div>
+        <!-- Targeta d'Eines de Suport (Pestanyes per a màxim confort i espai) -->
+        <div class="dash-card dash-tools-card">
+          <div class="tab-header-nav">
+            <button type="button" class="tab-nav-btn active" data-tab="tab-tree">
+              📂 Explorador de Carpetes
+            </button>
+            <button type="button" class="tab-nav-btn" data-tab="tab-cheatsheet">
+              📖 Guia de Comandes
+            </button>
+          </div>
 
-        <!-- Targeta de Recordatori de Comandes -->
-        <div class="dash-card">
-          <div class="card-title">📖 Guia de Comandaments Essencials</div>
-          <table class="cheatsheet-table">
-            <thead>
-              <tr>
-                <th>Comanda</th>
-                <th>Significat</th>
-                <th>Funció</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td><span class="cmd-badge">pwd</span></td>
-                <td>Print Working Directory</td>
-                <td>On soc ara mateix a l'ordinador?</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">ls</span></td>
-                <td>List</td>
-                <td>Llista els fitxers i carpetes del davant.</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">cd &lt;lloc&gt;</span></td>
-                <td>Change Directory</td>
-                <td>Mou-te a una altra carpeta (ex: <code>cd /var/log</code>).</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">cd ..</span></td>
-                <td>Pujar de nivell</td>
-                <td>Torna enrere a la carpeta anterior.</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">cat &lt;fitxer&gt;</span></td>
-                <td>Concatenate</td>
-                <td>Llegeix el contingut d'un arxiu de text.</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">grep &lt;mot&gt; &lt;fitxer&gt;</span></td>
-                <td>Filtre de cerca</td>
-                <td>Cerca línies clau dins d'un fitxer gran.</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">ps</span></td>
-                <td>Process Status</td>
-                <td>Gestor de Tasques: llista els processos actius a la RAM, el consum de CPU i el seu PID.</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">kill &lt;PID&gt;</span></td>
-                <td>Aturar procés</td>
-                <td>Atura un programa o virus pel seu número PID.</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">rm &lt;fitxer&gt;</span></td>
-                <td>Remove</td>
-                <td>Esborra un fitxer definitivament.</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">mkdir &lt;nom&gt;</span></td>
-                <td>Make Directory</td>
-                <td>Crea una carpeta nova per endreçar dades.</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">cp &lt;orig&gt; &lt;dest&gt;</span></td>
-                <td>Copy</td>
-                <td>Copia o duplica un fitxer a un altre directori.</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">scan</span></td>
-                <td>Escàner de xarxa</td>
-                <td>Mostra els equips connectats a la xarxa local.</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">firewall block &lt;IP&gt;</span></td>
-                <td>Tallafocs</td>
-                <td>Bloqueja l'accés a una adreça IP atacant.</td>
-              </tr>
-              <tr>
-                <td><span class="cmd-badge">ajuda</span> / <span class="cmd-badge">man</span></td>
-                <td>Manual d'ajuda</td>
-                <td>Demana una pista sobre la missió o comanda.</td>
-              </tr>
-            </tbody>
-          </table>
+          <!-- Pestanya 1: Explorador de carpetes -->
+          <div id="tab-tree" class="tab-pane active">
+            <p class="tab-subtext">
+              La carpeta ressaltada amb la fletxa verda indica la teva posició actual en tot moment:
+            </p>
+            <div id="tree-viewer"></div>
+          </div>
+
+          <!-- Pestanya 2: Guia de comandes essencials -->
+          <div id="tab-cheatsheet" class="tab-pane" style="display: none;">
+            <div class="cheatsheet-table-wrap">
+              <table class="cheatsheet-table">
+                <thead>
+                  <tr>
+                    <th>Comanda</th>
+                    <th>Significat</th>
+                    <th>Funció</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="cmd-badge">pwd</span></td>
+                    <td>Print Working Directory</td>
+                    <td>On soc ara mateix a l'ordinador?</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">ls</span></td>
+                    <td>List</td>
+                    <td>Llista els fitxers i carpetes del davant.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">cd &lt;lloc&gt;</span></td>
+                    <td>Change Directory</td>
+                    <td>Mou-te a una altra carpeta (ex: <code>cd /var/log</code>).</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">cd ..</span></td>
+                    <td>Pujar de nivell</td>
+                    <td>Torna enrere a la carpeta anterior.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">cat &lt;fitxer&gt;</span></td>
+                    <td>Concatenate</td>
+                    <td>Llegeix el contingut d'un arxiu de text.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">grep &lt;mot&gt; &lt;fitxer&gt;</span></td>
+                    <td>Filtre de cerca</td>
+                    <td>Cerca línies clau dins d'un fitxer gran.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">ps</span></td>
+                    <td>Process Status</td>
+                    <td>Gestor de Tasques: llista els processos actius a la RAM, el consum de CPU i el seu PID.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">kill &lt;PID&gt;</span></td>
+                    <td>Aturar procés</td>
+                    <td>Atura un programa o virus pel seu número PID.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">rm &lt;fitxer&gt;</span></td>
+                    <td>Remove</td>
+                    <td>Esborra un fitxer definitivament.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">mkdir &lt;nom&gt;</span></td>
+                    <td>Make Directory</td>
+                    <td>Crea una carpeta nova per endreçar dades.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">cp &lt;orig&gt; &lt;dest&gt;</span></td>
+                    <td>Copy</td>
+                    <td>Copia o duplica un fitxer a un altre directori.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">scan</span></td>
+                    <td>Escàner de xarxa</td>
+                    <td>Mostra els equips connectats a la xarxa local.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">firewall block &lt;IP&gt;</span></td>
+                    <td>Tallafocs</td>
+                    <td>Bloqueja l'accés a una adreça IP atacant.</td>
+                  </tr>
+                  <tr>
+                    <td><span class="cmd-badge">ajuda</span> / <span class="cmd-badge">man</span></td>
+                    <td>Manual d'ajuda</td>
+                    <td>Demana una pista sobre la missió o comanda.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </section>
     </main>

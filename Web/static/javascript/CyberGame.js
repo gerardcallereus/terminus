@@ -1259,6 +1259,38 @@ $(document).ready(function() {
         $("#tutorial-modal").fadeIn(250);
     }
 
+    // Gestió de les pestanyes del tauler d'eines (Explorador i Guia)
+    $(".tab-nav-btn").click(function() {
+        var targetTab = $(this).attr("data-tab");
+        $(".tab-nav-btn").removeClass("active");
+        $(this).addClass("active");
+        $(".tab-pane").hide();
+        $("#" + targetTab).show();
+    });
+
+    // Control d'ajust de mida de text (accessible i còmode per a qualsevol pantalla)
+    var textSizes = ["size-normal", "size-large", "size-xlarge"];
+    var currentSizeIndex = 0;
+    try {
+        var savedSize = localStorage.getItem("ciberdefensa_text_size");
+        if (savedSize && textSizes.indexOf(savedSize) > -1) {
+            currentSizeIndex = textSizes.indexOf(savedSize);
+            $("body").addClass(savedSize);
+        }
+    } catch(e) {}
+
+    $("#btn-toggle-text-size").click(function() {
+        $("body").removeClass(textSizes[currentSizeIndex]);
+        currentSizeIndex = (currentSizeIndex + 1) % textSizes.length;
+        var newSize = textSizes[currentSizeIndex];
+        if (newSize !== "size-normal") {
+            $("body").addClass(newSize);
+        }
+        try {
+            localStorage.setItem("ciberdefensa_text_size", newSize);
+        } catch(e) {}
+    });
+
     // Botó per obrir el Tutorial des de la capçalera
     $("#btn-show-tutorial").click(function() {
         showTutorialModal();
