@@ -11,8 +11,8 @@
     <script type="text/javascript" src="./static/javascript/jquery.terminal-0.6.3.js"></script>
 
     <!-- Motor del joc de ciberseguretat -->
-    <script type="text/javascript" src="./static/javascript/CyberFilesystem.js?v=2"></script>
-    <script type="text/javascript" src="./static/javascript/CyberGame.js?v=2"></script>
+    <script type="text/javascript" src="./static/javascript/CyberFilesystem.js?v=3"></script>
+    <script type="text/javascript" src="./static/javascript/CyberGame.js?v=3"></script>
 
     <!-- Fonts d'alta llegibilitat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,7 +21,7 @@
 
     <!-- CSS -->
     <link href="./static/css/jquery.terminal.css" rel="stylesheet"/>
-    <link href="./static/css/terminus.css?v=2" rel="stylesheet"/>
+    <link href="./static/css/terminus.css?v=3" rel="stylesheet"/>
   </head>
   <body>
     <!-- Capçalera del Centre de Comandament -->
@@ -41,7 +41,6 @@
           <span class="status-dot"></span>
           <span>AMENAÇA: CRÍTICA</span>
         </div>
-        <button id="btn-toggle-text-size" class="btn-header" title="Canviar la mida del text">🔤 Mida text</button>
         <button id="btn-show-tutorial" class="btn-header" title="Com fer servir la terminal">📖 Tutorial Terminal</button>
         <button id="btn-show-diploma" class="btn-header" style="display:none;" title="Veure el teu diploma oficial">🏅 Diploma</button>
         <button id="btn-restart" class="btn-header" title="Reinicia la missió">🔄 Reiniciar</button>
@@ -88,11 +87,11 @@
 
       <!-- Columna 3: Indicadors de Rànquing i Progrés de Recuperació -->
       <div class="top-card-col status-card-col">
-        <div class="rank-card-row">
+        <div class="status-rank-card">
           <span class="status-col-label">Rànquing:</span>
-          <span id="rank-val" class="rank-badge-val">CiberHacker d'Elit 🎖️</span>
+          <div id="rank-val" class="rank-badge-val">CiberHacker d'Elit 🎖️</div>
         </div>
-        <div class="progress-card-row">
+        <div class="status-progress-card">
           <div class="progress-meta">
             <span class="status-col-label">Recuperació Servidor:</span>
             <strong id="progress-percentage" class="progress-pct-val">0%</strong>
@@ -119,29 +118,21 @@
         <div id="term"></div>
       </section>
 
-      <!-- Columna Dreta: Eines de Suport (Explorador / Guia de Comandes) -->
+      <!-- Columna Dreta: Eines de Suport (Guia de Comandes primer, Explorador segon) -->
       <section id="dashboard-section">
         <div class="dash-card side-tools-card">
-          <!-- Botons de Pestanya Superiors: En clicar un, l'altre s'amaga -->
+          <!-- Botons de Pestanya: Guia primer, Explorador segon -->
           <div class="panel-tab-bar">
-            <button type="button" class="panel-tab-btn active" id="tab-btn-tree" data-tab="view-tree">
-              📂 Explorador
-            </button>
-            <button type="button" class="panel-tab-btn" id="tab-btn-commands" data-tab="view-commands">
+            <button type="button" class="panel-tab-btn active" id="tab-btn-commands" data-tab="view-commands">
               📖 Guia de Comandes
             </button>
+            <button type="button" class="panel-tab-btn" id="tab-btn-tree" data-tab="view-tree">
+              📂 Explorador
+            </button>
           </div>
 
-          <!-- Vista 1: Explorador de carpetes (actiu per defecte) -->
-          <div id="view-tree" class="view-pane active">
-            <div class="pane-helper-note">
-              ➜ La fletxa verda indica la carpeta on et trobes ara mateix:
-            </div>
-            <div id="tree-viewer"></div>
-          </div>
-
-          <!-- Vista 2: Guia de comandes (s'amaga l'explorador) -->
-          <div id="view-commands" class="view-pane" style="display: none;">
+          <!-- Vista 1: Guia de comandes (activa per defecte) -->
+          <div id="view-commands" class="view-pane active">
             <div class="pane-helper-note">
               💡 Clica qualsevol comanda per inserir-la directament a la terminal:
             </div>
@@ -213,6 +204,14 @@
                 </tbody>
               </table>
             </div>
+          </div>
+
+          <!-- Vista 2: Explorador de carpetes -->
+          <div id="view-tree" class="view-pane" style="display: none;">
+            <div class="pane-helper-note">
+              ➜ La fletxa verda indica la carpeta on et trobes ara mateix:
+            </div>
+            <div id="tree-viewer"></div>
           </div>
         </div>
       </section>

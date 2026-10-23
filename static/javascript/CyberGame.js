@@ -1259,18 +1259,18 @@ $(document).ready(function() {
         $("#tutorial-modal").fadeIn(250);
     }
 
-    // Gestió d'intercanvi entre l'Explorador de Carpetes i la Guia de Comandes
+    // Gestió d'intercanvi entre la Guia de Comandes i l'Explorador de Carpetes (Comandes primer, Explorador segon)
     function switchRightPanel(viewId) {
-        if (viewId === "view-commands") {
-            $("#view-tree").hide();
-            $("#view-commands").show();
-            $(".panel-tab-btn, .tab-nav-btn").removeClass("active");
-            $("#tab-btn-commands").addClass("active");
-        } else {
+        if (viewId === "view-tree") {
             $("#view-commands").hide();
             $("#view-tree").show();
             $(".panel-tab-btn, .tab-nav-btn").removeClass("active");
             $("#tab-btn-tree").addClass("active");
+        } else {
+            $("#view-tree").hide();
+            $("#view-commands").show();
+            $(".panel-tab-btn, .tab-nav-btn").removeClass("active");
+            $("#tab-btn-commands").addClass("active");
         }
     }
 
@@ -1288,29 +1288,6 @@ $(document).ready(function() {
             term.set_command(baseCmd);
             term.focus();
         }
-    });
-
-    // Control d'ajust de mida de text (accessible i còmode per a qualsevol pantalla)
-    var textSizes = ["size-normal", "size-large", "size-xlarge"];
-    var currentSizeIndex = 0;
-    try {
-        var savedSize = localStorage.getItem("ciberdefensa_text_size");
-        if (savedSize && textSizes.indexOf(savedSize) > -1) {
-            currentSizeIndex = textSizes.indexOf(savedSize);
-            $("body").addClass(savedSize);
-        }
-    } catch(e) {}
-
-    $("#btn-toggle-text-size").click(function() {
-        $("body").removeClass(textSizes[currentSizeIndex]);
-        currentSizeIndex = (currentSizeIndex + 1) % textSizes.length;
-        var newSize = textSizes[currentSizeIndex];
-        if (newSize !== "size-normal") {
-            $("body").addClass(newSize);
-        }
-        try {
-            localStorage.setItem("ciberdefensa_text_size", newSize);
-        } catch(e) {}
     });
 
     // Botó per obrir el Tutorial des de la capçalera

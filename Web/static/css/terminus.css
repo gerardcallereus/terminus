@@ -30,9 +30,9 @@ body {
     background-color: var(--bg-dark);
     color: var(--text-main);
     font-family: var(--font-ui);
-    letter-spacing: 0.035em;
-    word-spacing: 0.08em;
-    line-height: 1.7;
+    letter-spacing: 0.025em;
+    word-spacing: 0.06em;
+    line-height: 1.75;
     font-size: 15.5px;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -40,65 +40,6 @@ body {
     overflow: hidden;
     display: flex;
     flex-direction: column;
-}
-
-/* Ajust de mida de text per a confort visual i pantalles petites */
-body.size-large {
-    font-size: 114%;
-}
-body.size-large #term {
-    font-size: 17px !important;
-    line-height: 1.7 !important;
-}
-body.size-large .task-instruction {
-    font-size: 17px !important;
-    line-height: 1.7 !important;
-}
-body.size-large .card-title {
-    font-size: 15px !important;
-}
-body.size-large .pedagogy-box {
-    font-size: 14.5px !important;
-}
-body.size-large .hint-display-box {
-    font-size: 15px !important;
-    line-height: 1.7 !important;
-}
-body.size-large .cheatsheet-table {
-    font-size: 14.5px !important;
-    line-height: 1.65 !important;
-}
-body.size-large .mission-heading {
-    font-size: 16.5px !important;
-}
-
-body.size-xlarge {
-    font-size: 126%;
-}
-body.size-xlarge #term {
-    font-size: 18.5px !important;
-    line-height: 1.75 !important;
-}
-body.size-xlarge .task-instruction {
-    font-size: 18.5px !important;
-    line-height: 1.75 !important;
-}
-body.size-xlarge .card-title {
-    font-size: 16px !important;
-}
-body.size-xlarge .pedagogy-box {
-    font-size: 15.5px !important;
-}
-body.size-xlarge .hint-display-box {
-    font-size: 16px !important;
-    line-height: 1.75 !important;
-}
-body.size-xlarge .cheatsheet-table {
-    font-size: 15.5px !important;
-    line-height: 1.7 !important;
-}
-body.size-xlarge .mission-heading {
-    font-size: 18px !important;
 }
 
 /* Capçalera superior */
@@ -214,8 +155,8 @@ body.size-xlarge .mission-heading {
     border-bottom: 2px solid #1e293b;
     padding: 10px 16px;
     display: grid;
-    grid-template-columns: 1.15fr 1.45fr 230px;
-    gap: 12px;
+    grid-template-columns: minmax(300px, 1.2fr) minmax(360px, 1.5fr) minmax(280px, 1fr);
+    gap: 14px;
     align-items: stretch;
     flex-shrink: 0;
     box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
@@ -224,19 +165,19 @@ body.size-xlarge .mission-heading {
 
 .top-card-col {
     border-radius: 8px;
-    padding: 9px 13px;
+    padding: 10px 14px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    gap: 6px;
+    justify-content: flex-start;
+    gap: 8px;
     min-width: 0;
 }
 
 /* Columna 1: Context de la Missió */
 .mission-card-col {
-    background: rgba(15, 23, 42, 0.75);
+    background: rgba(15, 23, 42, 0.85);
     border: 1px solid rgba(56, 189, 248, 0.25);
-    border-left: 3px solid var(--accent-cyan);
+    border-left: 4px solid var(--accent-cyan);
 }
 
 .mission-badge-row {
@@ -249,81 +190,87 @@ body.size-xlarge .mission-heading {
     background: rgba(56, 189, 248, 0.15);
     color: var(--accent-cyan);
     border: 1px solid rgba(56, 189, 248, 0.35);
-    font-size: 11px;
+    font-size: 11.5px;
     font-weight: 700;
     padding: 2px 8px;
     border-radius: 4px;
     font-family: var(--font-mono);
-    letter-spacing: 0.5px;
+    letter-spacing: 0.04em;
 }
 
 .mission-title-row {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 6px;
     min-width: 0;
 }
 
 .mission-icon {
-    font-size: 16px;
+    font-size: 17px;
     flex-shrink: 0;
+    margin-top: 1px;
 }
 
 .mission-label-text {
     color: var(--accent-cyan);
     font-weight: 700;
-    font-size: 12.5px;
+    font-size: 13px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.05em;
     white-space: nowrap;
+    margin-top: 1px;
 }
 
 .mission-title-text {
-    font-size: 14.5px;
+    font-size: 16px;
     font-weight: 700;
     color: #ffffff;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    line-height: 1.4;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+    line-height: 1.5;
 }
 
 .mission-pedagogy-row {
     display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    line-height: 1.5;
-    min-width: 0;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13.5px;
+    line-height: 1.7;
+    background: rgba(56, 189, 248, 0.08);
+    border-radius: 6px;
+    padding: 8px 10px;
+    border-left: 2px solid rgba(56, 189, 248, 0.4);
 }
 
 .pedagogy-pill {
-    background: rgba(251, 191, 36, 0.15);
+    background: rgba(251, 191, 36, 0.18);
     color: var(--accent-amber);
     border: 1px solid rgba(251, 191, 36, 0.35);
-    padding: 1px 6px;
+    padding: 2px 7px;
     border-radius: 4px;
-    font-size: 10.5px;
+    font-size: 11px;
     font-weight: 700;
     font-family: var(--font-mono);
-    white-space: nowrap;
-    flex-shrink: 0;
+    align-self: flex-start;
+    letter-spacing: 0.03em;
 }
 
 .pedagogy-desc {
-    color: #94a3b8;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    color: #cbd5e1;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
+    line-height: 1.65;
+    font-size: 13.5px;
 }
 
 /* Columna 2: Repte Actual (Targeta focal destacada) */
 .challenge-card-col {
-    background: rgba(17, 24, 39, 0.9);
-    border: 1px solid rgba(251, 191, 36, 0.4);
-    border-left: 3px solid var(--accent-amber);
-    box-shadow: 0 0 16px rgba(251, 191, 36, 0.08);
-    justify-content: flex-start;
+    background: rgba(17, 24, 39, 0.95);
+    border: 1px solid rgba(251, 191, 36, 0.45);
+    border-left: 4px solid var(--accent-amber);
+    box-shadow: 0 0 16px rgba(251, 191, 36, 0.1);
 }
 
 .challenge-header-bar {
@@ -331,6 +278,7 @@ body.size-xlarge .mission-heading {
     align-items: center;
     justify-content: space-between;
     gap: 8px;
+    flex-wrap: wrap;
 }
 
 .challenge-title-group {
@@ -340,8 +288,8 @@ body.size-xlarge .mission-heading {
 }
 
 .challenge-pulse-dot {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background-color: var(--accent-amber);
     box-shadow: 0 0 8px var(--accent-amber);
@@ -352,80 +300,90 @@ body.size-xlarge .mission-heading {
     color: var(--accent-amber);
     font-weight: 700;
     font-family: var(--font-mono);
-    font-size: 12px;
-    letter-spacing: 0.5px;
+    font-size: 12.5px;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
 }
 
 .challenge-body {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
     min-width: 0;
 }
 
 .task-instruction {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 600;
     color: #ffffff;
-    line-height: 1.55;
-    letter-spacing: 0.03em;
+    line-height: 1.7;
+    letter-spacing: 0.025em;
     word-spacing: 0.05em;
+    white-space: normal;
+    word-break: normal;
+    overflow-wrap: break-word;
 }
 
 /* Columna 3: Indicadors de Rànquing i Progrés */
 .status-card-col {
-    background: rgba(15, 23, 42, 0.75);
+    background: rgba(15, 23, 42, 0.85);
     border: 1px solid rgba(52, 211, 153, 0.3);
-    border-left: 3px solid var(--accent-green);
-    gap: 8px;
+    border-left: 4px solid var(--accent-green);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+    min-width: 270px;
 }
 
-.rank-card-row {
+.status-rank-card {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    font-size: 11.5px;
-    font-family: var(--font-mono);
+    flex-direction: column;
+    gap: 3px;
 }
 
 .status-col-label {
     color: var(--text-muted);
     font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.06em;
+    font-family: var(--font-mono);
 }
 
 .rank-badge-val {
     color: var(--accent-green);
+    font-size: 14px;
     font-weight: 700;
-    white-space: nowrap;
+    line-height: 1.5;
+    white-space: normal;
+    word-break: break-word;
+    font-family: var(--font-mono);
 }
 
-.progress-card-row {
+.status-progress-card {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 5px;
 }
 
 .progress-meta {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 11px;
+    font-size: 11.5px;
     font-family: var(--font-mono);
 }
 
 .progress-pct-val {
     color: var(--accent-cyan);
-    font-size: 12.5px;
+    font-size: 14px;
     font-weight: 700;
 }
 
 .progress-bar-track {
     width: 100%;
-    height: 7px;
+    height: 8px;
     background: #1a2333;
     border-radius: 4px;
     overflow: hidden;
@@ -492,20 +450,26 @@ body.size-xlarge .mission-heading {
     width: 100%;
     height: calc(100% - 32px);
     background: #090e18 !important;
-    padding: 12px 16px;
+    padding: 14px 18px;
     font-family: var(--font-mono) !important;
-    font-size: 15px !important;
-    line-height: 1.6 !important;
-    letter-spacing: 0.02em;
+    font-size: 15.5px !important;
+    line-height: 1.75 !important;
+    letter-spacing: 0.025em;
+    word-spacing: 0.05em;
 }
 
 /* Sobreescriptura d'estils per a jQuery Terminal */
 .terminal {
     background-color: #090e18 !important;
     color: #f1f5f9 !important;
+    line-height: 1.75 !important;
 }
 .terminal .cmd {
-    margin-top: 4px;
+    margin-top: 6px;
+    line-height: 1.75 !important;
+}
+.terminal div {
+    line-height: 1.75 !important;
 }
 .terminal .cmd .prompt {
     color: var(--accent-green) !important;
@@ -818,24 +782,28 @@ body.size-xlarge .mission-heading {
     background: #090e18;
     border: 1px solid #1c2538;
     border-radius: 6px;
-    padding: 12px;
+    padding: 14px;
     font-family: var(--font-mono);
-    font-size: 13px;
-    line-height: 1.6;
+    font-size: 14px;
+    line-height: 1.75;
+    letter-spacing: 0.025em;
     flex: 1;
-    min-height: 160px;
+    height: 100%;
+    min-height: 0;
+    width: 100%;
     overflow-y: auto;
     color: #cbd5e1;
 }
 
 .tree-line {
-    padding: 3px 6px;
+    padding: 4px 8px;
     border-radius: 4px;
     display: flex;
     align-items: center;
     gap: 8px;
     transition: all 0.15s;
     white-space: nowrap;
+    line-height: 1.75;
 }
 
 .tree-line.is-dir {
@@ -931,19 +899,19 @@ body.size-xlarge .mission-heading {
 .cheatsheet-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 13.5px;
-    line-height: 1.65;
+    font-size: 14px;
+    line-height: 1.7;
     letter-spacing: 0.025em;
 }
 
 .cheatsheet-table th {
     text-align: left;
-    padding: 10px 12px;
+    padding: 11px 14px;
     border-bottom: 1px solid var(--border-color);
     background: #111a2c;
     color: var(--accent-cyan);
     font-family: var(--font-mono);
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 700;
     position: sticky;
     top: 0;
@@ -951,9 +919,10 @@ body.size-xlarge .mission-heading {
 }
 
 .cheatsheet-table td {
-    padding: 8px 12px;
+    padding: 10px 14px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     vertical-align: middle;
+    line-height: 1.65;
 }
 
 .cheatsheet-table tr:nth-child(even) td {
@@ -977,7 +946,7 @@ body.size-xlarge .mission-heading {
     border: 1px solid rgba(52, 211, 153, 0.35);
     padding: 3px 8px;
     border-radius: 4px;
-    font-size: 12.5px;
+    font-size: 13px;
     display: inline-block;
     white-space: nowrap;
 }
