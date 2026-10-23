@@ -14,8 +14,8 @@
     <script type="text/javascript" src="./static/javascript/jquery.terminal-0.6.3.js"></script>
 
     <!-- Motor del joc de ciberseguretat -->
-    <script type="text/javascript" src="./static/javascript/CyberFilesystem.js?v=4"></script>
-    <script type="text/javascript" src="./static/javascript/CyberGame.js?v=4"></script>
+    <script type="text/javascript" src="./static/javascript/CyberFilesystem.js?v=5"></script>
+    <script type="text/javascript" src="./static/javascript/CyberGame.js?v=5"></script>
 
     <!-- Fonts d'alta llegibilitat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,8 +23,8 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- CSS -->
-    <link href="./static/css/jquery.terminal.css" rel="stylesheet"/>
-    <link href="./static/css/terminus.css?v=4" rel="stylesheet"/>
+    <link href="./static/css/jquery.terminal.css?v=5" rel="stylesheet"/>
+    <link href="./static/css/terminus.css?v=5" rel="stylesheet"/>
   </head>
   <body>
     <!-- Capçalera del Centre de Comandament -->
@@ -88,15 +88,12 @@
         </div>
       </div>
 
-      <!-- Columna 3: Indicadors de Rànquing i Progrés de Recuperació -->
+      <!-- Columna 3: Indicador de Progrés de Recuperació -->
       <div class="top-card-col status-card-col">
-        <div class="status-rank-card">
-          <span class="status-col-label">Rànquing:</span>
-          <div id="rank-val" class="rank-badge-val">CiberHacker d'Elit 🎖️</div>
-        </div>
+        <span id="rank-val" style="display: none;">CiberHacker d'Elit 🎖️</span>
         <div class="status-progress-card">
           <div class="progress-meta">
-            <span class="status-col-label">Recuperació Servidor:</span>
+            <span class="status-col-label">Recuperació:</span>
             <strong id="progress-percentage" class="progress-pct-val">0%</strong>
           </div>
           <div class="progress-bar-track">

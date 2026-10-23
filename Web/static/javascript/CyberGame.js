@@ -1256,6 +1256,14 @@ $(document).ready(function() {
         history: true
     });
 
+    // Habilitar desplaçament suau amb la roda del ratolí i el trackpad al terminal
+    var termElement = document.getElementById("term");
+    if (termElement) {
+        termElement.addEventListener("wheel", function(e) {
+            termElement.scrollTop += e.deltaY;
+        }, { passive: true });
+    }
+
     // Funció per mostrar el Minitutorial
     function showTutorialModal() {
         $("#tutorial-modal").fadeIn(250);

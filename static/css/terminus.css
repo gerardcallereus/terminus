@@ -155,7 +155,7 @@ body {
     border-bottom: 2px solid #1e293b;
     padding: 10px 16px;
     display: grid;
-    grid-template-columns: minmax(300px, 1.2fr) minmax(360px, 1.5fr) minmax(280px, 1fr);
+    grid-template-columns: minmax(320px, 1.15fr) minmax(400px, 1.65fr) 140px;
     gap: 14px;
     align-items: stretch;
     flex-shrink: 0;
@@ -328,57 +328,42 @@ body {
 .status-card-col {
     background: rgba(15, 23, 42, 0.85);
     border: 1px solid rgba(52, 211, 153, 0.3);
-    border-left: 4px solid var(--accent-green);
+    border-left: 3px solid var(--accent-green);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 12px;
-    min-width: 270px;
-}
-
-.status-rank-card {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-}
-
-.status-col-label {
-    color: var(--text-muted);
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    font-family: var(--font-mono);
-}
-
-.rank-badge-val {
-    color: var(--accent-green);
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1.5;
-    white-space: normal;
-    word-break: break-word;
-    font-family: var(--font-mono);
+    padding: 8px 12px;
+    min-width: 0;
 }
 
 .status-progress-card {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
+    width: 100%;
 }
 
 .progress-meta {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 11.5px;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.status-col-label {
+    color: var(--text-muted);
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
     font-family: var(--font-mono);
 }
 
 .progress-pct-val {
     color: var(--accent-cyan);
-    font-size: 14px;
-    font-weight: 700;
+    font-size: 22px;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    line-height: 1.1;
 }
 
 .progress-bar-track {
@@ -408,7 +393,7 @@ body {
 
 /* Columna esquerra: Terminal */
 #terminal-section {
-    flex: 1.25;
+    flex: 1.35;
     background-color: #0b0e14;
     border-right: 1px solid var(--border-color);
     display: flex;
@@ -456,6 +441,32 @@ body {
     line-height: 1.75 !important;
     letter-spacing: 0.025em;
     word-spacing: 0.05em;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    scrollbar-width: thin;
+    scrollbar-color: #334155 #090e18;
+}
+
+#term::-webkit-scrollbar,
+.terminal::-webkit-scrollbar {
+    width: 8px;
+}
+
+#term::-webkit-scrollbar-track,
+.terminal::-webkit-scrollbar-track {
+    background: #090e18;
+}
+
+#term::-webkit-scrollbar-thumb,
+.terminal::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 4px;
+    border: 1px solid #334155;
+}
+
+#term::-webkit-scrollbar-thumb:hover,
+.terminal::-webkit-scrollbar-thumb:hover {
+    background: #475569;
 }
 
 /* Sobreescriptura d'estils per a jQuery Terminal */
@@ -463,6 +474,8 @@ body {
     background-color: #090e18 !important;
     color: #f1f5f9 !important;
     line-height: 1.75 !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
 }
 .terminal .cmd {
     margin-top: 6px;
@@ -480,9 +493,9 @@ body {
     text-decoration: underline;
 }
 
-/* Columna dreta: Panell de control i Ciberdefensa */
+/* Columna dreta: Panell de control i Ciberdefensa (reduït un 10%) */
 #dashboard-section {
-    flex: 1;
+    flex: 0.9;
     background-color: var(--bg-dark);
     display: flex;
     flex-direction: column;
@@ -1771,11 +1784,11 @@ kbd {
     }
 
     #terminal-section {
-        flex: 1.15;
+        flex: 1.35;
     }
 
     #dashboard-section {
-        flex: 1;
+        flex: 0.9;
         padding: 10px 12px;
         gap: 10px;
     }
