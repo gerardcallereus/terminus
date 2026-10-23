@@ -1264,26 +1264,19 @@ $(document).ready(function() {
         if (viewId === "view-commands") {
             $("#view-tree").hide();
             $("#view-commands").show();
-            $("#tab-btn-tree").removeClass("active");
+            $(".panel-tab-btn, .tab-nav-btn").removeClass("active");
             $("#tab-btn-commands").addClass("active");
-            $("#btn-toggle-view-text").text("Veure Explorador");
         } else {
             $("#view-commands").hide();
             $("#view-tree").show();
-            $("#tab-btn-commands").removeClass("active");
+            $(".panel-tab-btn, .tab-nav-btn").removeClass("active");
             $("#tab-btn-tree").addClass("active");
-            $("#btn-toggle-view-text").text("Veure Comandes");
         }
     }
 
-    $(".tab-nav-btn").click(function() {
+    $(document).on("click", ".panel-tab-btn, .tab-nav-btn", function() {
         var targetTab = $(this).attr("data-tab");
         switchRightPanel(targetTab);
-    });
-
-    $("#btn-toggle-view").click(function() {
-        var isTreeVisible = $("#view-tree").is(":visible");
-        switchRightPanel(isTreeVisible ? "view-commands" : "view-tree");
     });
 
     // Inserció ràpida de comandes al fer clic sobre una fila de la guia de comandes

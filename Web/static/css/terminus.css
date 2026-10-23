@@ -210,125 +210,158 @@ body.size-xlarge .mission-heading {
 
 /* 1. Barra Superior d'Objectiu de la Missió i Repte Actual (ocupa el 100% horitzontal) */
 .top-mission-bar {
-    background: #0f1624;
-    border-bottom: 1px solid var(--border-color);
-    padding: 8px 18px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+    background: linear-gradient(180deg, #101726 0%, #0c121e 100%);
+    border-bottom: 2px solid #1e293b;
+    padding: 10px 16px;
+    display: grid;
+    grid-template-columns: 1.15fr 1.45fr 230px;
+    gap: 12px;
+    align-items: stretch;
     flex-shrink: 0;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
     z-index: 90;
 }
 
-.mission-col-left {
+.top-card-col {
+    border-radius: 8px;
+    padding: 9px 13px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    justify-content: center;
+    gap: 6px;
     min-width: 0;
-    flex: 1;
 }
 
-.mission-header-line {
+/* Columna 1: Context de la Missió */
+.mission-card-col {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    border-left: 3px solid var(--accent-cyan);
+}
+
+.mission-badge-row {
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex-wrap: wrap;
 }
 
-.mission-heading-wrap {
-    display: inline-flex;
+.mission-phase-badge {
+    display: inline-block;
+    background: rgba(56, 189, 248, 0.15);
+    color: var(--accent-cyan);
+    border: 1px solid rgba(56, 189, 248, 0.35);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.5px;
+}
+
+.mission-title-row {
+    display: flex;
     align-items: center;
     gap: 6px;
     min-width: 0;
 }
 
-.mission-heading-icon {
+.mission-icon {
     font-size: 16px;
+    flex-shrink: 0;
 }
 
-.mission-heading-label {
+.mission-label-text {
     color: var(--accent-cyan);
     font-weight: 700;
-    font-family: var(--font-mono);
-    font-size: 12px;
+    font-size: 12.5px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     white-space: nowrap;
 }
 
-.mission-heading {
+.mission-title-text {
     font-size: 14.5px;
     font-weight: 700;
     color: #ffffff;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    line-height: 1.4;
 }
 
-.pedagogy-inline {
+.mission-pedagogy-row {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     font-size: 12px;
     line-height: 1.5;
     min-width: 0;
 }
 
 .pedagogy-pill {
-    background: rgba(56, 189, 248, 0.15);
-    color: var(--accent-cyan);
-    border: 1px solid rgba(56, 189, 248, 0.3);
-    padding: 1px 7px;
+    background: rgba(251, 191, 36, 0.15);
+    color: var(--accent-amber);
+    border: 1px solid rgba(251, 191, 36, 0.35);
+    padding: 1px 6px;
     border-radius: 4px;
-    font-size: 11px;
+    font-size: 10.5px;
     font-weight: 700;
     font-family: var(--font-mono);
     white-space: nowrap;
     flex-shrink: 0;
 }
 
-.pedagogy-text {
+.pedagogy-desc {
     color: #94a3b8;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* Bloc Central: ⚡ Instrucció del Repte Actual integrat */
-.mission-col-center {
-    flex: 1.35;
-    min-width: 0;
+/* Columna 2: Repte Actual (Targeta focal destacada) */
+.challenge-card-col {
+    background: rgba(17, 24, 39, 0.9);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    border-left: 3px solid var(--accent-amber);
+    box-shadow: 0 0 16px rgba(251, 191, 36, 0.08);
+    justify-content: flex-start;
 }
 
-.challenge-top-box {
-    background: #0b111c;
-    border: 1px solid #1e2c40;
-    border-radius: 8px;
-    padding: 7px 12px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-}
-
-.challenge-instruction-row {
+.challenge-header-bar {
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 8px;
 }
 
-.task-badge {
-    background: rgba(251, 191, 36, 0.18);
+.challenge-title-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.challenge-pulse-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--accent-amber);
+    box-shadow: 0 0 8px var(--accent-amber);
+    animation: pulse 1.5s infinite;
+}
+
+.challenge-badge {
     color: var(--accent-amber);
     font-weight: 700;
     font-family: var(--font-mono);
-    font-size: 11.5px;
-    padding: 2px 8px;
-    border-radius: 4px;
-    white-space: nowrap;
-    flex-shrink: 0;
+    font-size: 12px;
     letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.challenge-body {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
 }
 
 .task-instruction {
@@ -338,34 +371,73 @@ body.size-xlarge .mission-heading {
     line-height: 1.55;
     letter-spacing: 0.03em;
     word-spacing: 0.05em;
-    flex: 1;
-    min-width: 0;
 }
 
-/* Bloc Dret: Rànquing i Progrés */
-.mission-col-right {
+/* Columna 3: Indicadors de Rànquing i Progrés */
+.status-card-col {
+    background: rgba(15, 23, 42, 0.75);
+    border: 1px solid rgba(52, 211, 153, 0.3);
+    border-left: 3px solid var(--accent-green);
+    gap: 8px;
+}
+
+.rank-card-row {
     display: flex;
     align-items: center;
-    gap: 14px;
-    flex-shrink: 0;
-}
-
-.top-meta-badge {
+    justify-content: space-between;
+    gap: 8px;
     font-size: 11.5px;
     font-family: var(--font-mono);
+}
+
+.status-col-label {
     color: var(--text-muted);
-    background: #141c2c;
-    border: 1px solid var(--border-color);
-    padding: 4px 10px;
-    border-radius: 6px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rank-badge-val {
+    color: var(--accent-green);
+    font-weight: 700;
     white-space: nowrap;
 }
 
-.top-progress-box {
+.progress-card-row {
     display: flex;
     flex-direction: column;
     gap: 4px;
-    width: 150px;
+}
+
+.progress-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11px;
+    font-family: var(--font-mono);
+}
+
+.progress-pct-val {
+    color: var(--accent-cyan);
+    font-size: 12.5px;
+    font-weight: 700;
+}
+
+.progress-bar-track {
+    width: 100%;
+    height: 7px;
+    background: #1a2333;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent-cyan), var(--accent-green));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    box-shadow: 0 0 10px rgba(0, 255, 170, 0.5);
 }
 
 /* 3. Contingut principal dividit en dues columnes */
@@ -461,62 +533,84 @@ body.size-xlarge .mission-heading {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: 10px;
-    padding: 14px 16px;
+    padding: 12px;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
     box-shadow: 0 4px 16px rgba(0,0,0,0.3);
     transition: border-color 0.2s;
 }
 
 .side-tools-card {
     flex: 1;
+    height: 100%;
     min-height: 0;
     overflow: hidden;
+    background: #0d1422;
+    border: 1px solid #1c273c;
+    border-radius: 8px;
+    padding: 10px 12px;
 }
 
-.tools-card-header {
+/* Barra de pestanyes segmented control */
+.panel-tab-bar {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 8px;
+    background: #070b12;
+    border: 1px solid #192334;
+    border-radius: 7px;
+    padding: 3px;
+    gap: 4px;
     flex-shrink: 0;
 }
 
-.btn-toggle-view {
-    background: #0e1726;
-    border: 1px solid var(--border-color);
-    color: var(--accent-cyan);
-    padding: 5px 12px;
-    border-radius: 6px;
+.panel-tab-btn {
+    flex: 1;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text-muted);
+    padding: 8px 14px;
+    border-radius: 5px;
     font-family: var(--font-ui);
-    font-size: 12px;
+    font-size: 13.5px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    white-space: nowrap;
-    flex-shrink: 0;
+    justify-content: center;
+    gap: 8px;
+    user-select: none;
 }
 
-.btn-toggle-view:hover {
-    background: #18253a;
-    border-color: var(--accent-cyan);
+.panel-tab-btn:hover {
     color: #ffffff;
-    box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.panel-tab-btn.active {
+    background: #172439;
+    color: #ffffff;
+    font-weight: 700;
+    border-color: var(--accent-cyan);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+.pane-helper-note {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    padding: 2px 0 6px 0;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
 }
 
 .view-pane {
     display: flex;
     flex-direction: column;
     flex: 1;
+    height: 100%;
     min-height: 0;
     overflow: hidden;
-    animation: fadeIn 0.2s ease;
+    animation: fadeIn 0.15s ease;
 }
 
 .dash-card:hover {
@@ -1870,6 +1964,11 @@ kbd {
 
 /* Pantalles verticals o finestres inferiors a 960px */
 @media screen and (max-width: 960px) {
+    .top-mission-bar {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
     #app-header {
         height: auto;
         padding: 8px 12px;
