@@ -3,28 +3,26 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
     <meta name="author" content="Departament de Tecnologia i Digitalització"/>
     <title>Operació Terminal: Ciberdefensa</title>
 
-    <!-- Scripts jQuery i jQuery Terminal -->
-    <script type="text/javascript" src="./static/javascript/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="./static/javascript/jquery.terminal-0.6.3.js"></script>
+    <!-- CSS Crític primer per evitar bloqueig de layout -->
+    <link href="./static/css/jquery.terminal.css?v=7" rel="stylesheet"/>
+    <link href="./static/css/terminus.css?v=7" rel="stylesheet"/>
 
-    <!-- Motor del joc de ciberseguretat -->
-    <script type="text/javascript" src="./static/javascript/CyberFilesystem.js?v=6"></script>
-    <script type="text/javascript" src="./static/javascript/CyberGame.js?v=6"></script>
-
-    <!-- Fonts d'alta llegibilitat -->
+    <!-- Fonts d'alta llegibilitat (càrrega asíncrona no bloquejant per a xarxes escolars) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+    </noscript>
 
-    <!-- CSS -->
-    <link href="./static/css/jquery.terminal.css?v=6" rel="stylesheet"/>
-    <link href="./static/css/terminus.css?v=6" rel="stylesheet"/>
+    <!-- Scripts jQuery, jQuery Terminal i Motor del Joc (defer per no bloquejar el renderitzat) -->
+    <script defer type="text/javascript" src="./static/javascript/jquery-1.9.1.min.js?v=7"></script>
+    <script defer type="text/javascript" src="./static/javascript/jquery.terminal-0.6.3.js?v=7"></script>
+    <script defer type="text/javascript" src="./static/javascript/CyberFilesystem.js?v=7"></script>
+    <script defer type="text/javascript" src="./static/javascript/CyberGame.js?v=7"></script>
   </head>
   <body>
     <!-- Capçalera del Centre de Comandament -->

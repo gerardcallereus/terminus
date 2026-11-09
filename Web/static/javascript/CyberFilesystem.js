@@ -400,20 +400,20 @@ CyberFilesystem.prototype.grep = function(query, pathStr) {
 
 CyberFilesystem.prototype.ps = function() {
     var out = [
-        "================================================================================",
-        "  ESTAT DELS PROCESSOS EN MEMÒRIA RAM (ps - Process Status)                     ",
-        "================================================================================",
-        "  PID    USUARI        CPU%    MEMÒRIA    NOM DEL PROCÉS        ESTAT",
-        "--------------------------------------------------------------------------------"
+        "==============================================================",
+        "  ESTAT DELS PROCESSOS EN MEMÒRIA RAM (ps - Process Status)   ",
+        "==============================================================",
+        "  PID   USUARI        CPU%   MEM     NOM DEL PROCÉS     ESTAT",
+        "--------------------------------------------------------------"
     ];
     for (var i = 0; i < this.processes.length; i++) {
         var p = this.processes[i];
         var isMalicious = p.name.indexOf("virus") > -1;
         var pColor = isMalicious ? "[[;#ff5555;]" : "[[;#e2e8f0;]";
-        var line = "  " + (p.pid + "").padEnd(7) + p.user.padEnd(14) + p.cpu.padEnd(8) + p.mem.padEnd(11) + p.name.padEnd(22) + p.status;
+        var line = "  " + (p.pid + "").padEnd(6) + p.user.padEnd(14) + p.cpu.padEnd(7) + p.mem.padEnd(8) + p.name.padEnd(19) + p.status;
         out.push(pColor + line + "]");
     }
-    out.push("--------------------------------------------------------------------------------");
+    out.push("--------------------------------------------------------------");
     out.push("[[;#7dd3fc;]ℹ️ GUIA DE COLUMNES DEL GESTOR DE PROCESSOS:]");
     out.push("  • [[;#ffb703;]PID (Process ID):] Número identificador únic del programa a la memòria.");
     out.push("  • [[;#ffb703;]CPU% / MEMÒRIA:] Consum de recursos. Un valor proper al 100% col·lapsa el servidor!");

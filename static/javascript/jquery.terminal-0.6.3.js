@@ -61,64 +61,103 @@
     // ----------------------------------------
     // START Storage plugin
     // ----------------------------------------
-    // Private data
-    var isLS = typeof window.localStorage !== 'undefined';
+    // Private data (safe against iframe third-party cookie/storage blocking)
+    var memStore = {};
+    var isLS = (function() {
+        try {
+            var testKey = '__term_ls_test__';
+            if (typeof window.localStorage !== 'undefined' && window.localStorage !== null) {
+                window.localStorage.setItem(testKey, '1');
+                window.localStorage.removeItem(testKey);
+                return true;
+            }
+        } catch (e) {}
+        return false;
+    })();
     // Private functions
     function wls(n, v) {
         var c;
-        if (typeof n === 'string' && typeof v === 'string') {
-            localStorage[n] = v;
-            return true;
-        } else if (typeof n === 'object' && typeof v === 'undefined') {
-            for (c in n) {
-                if (n.hasOwnProperty(c)) {
-                    localStorage[c] = n[c];
+        try {
+            if (typeof n === 'string' && typeof v === 'string') {
+                localStorage[n] = v;
+                return true;
+            } else if (typeof n === 'object' && typeof v === 'undefined') {
+                for (c in n) {
+                    if (n.hasOwnProperty(c)) {
+                        localStorage[c] = n[c];
+                    }
                 }
+                return true;
             }
-            return true;
+        } catch (e) {
+            if (typeof n === 'string' && typeof v === 'string') {
+                memStore[n] = v;
+                return true;
+            }
         }
         return false;
     }
     function wc(n, v) {
         var dt, e, c;
-        dt = new Date();
-        dt.setTime(dt.getTime() + 31536000000);
-        e = '; expires=' + dt.toGMTString();
-        if (typeof n === 'string' && typeof v === 'string') {
-            document.cookie = n + '=' + v + e + '; path=/';
-            return true;
-        } else if (typeof n === 'object' && typeof v === 'undefined') {
-            for (c in n) {
-                if (n.hasOwnProperty(c)) {
-                    document.cookie = c + '=' + n[c] + e + '; path=/';
+        try {
+            dt = new Date();
+            dt.setTime(dt.getTime() + 31536000000);
+            e = '; expires=' + dt.toGMTString();
+            if (typeof n === 'string' && typeof v === 'string') {
+                memStore[n] = v;
+                document.cookie = n + '=' + v + e + '; path=/';
+                return true;
+            } else if (typeof n === 'object' && typeof v === 'undefined') {
+                for (c in n) {
+                    if (n.hasOwnProperty(c)) {
+                        memStore[c] = n[c];
+                        document.cookie = c + '=' + n[c] + e + '; path=/';
+                    }
                 }
+                return true;
             }
-            return true;
+        } catch (err) {
+            if (typeof n === 'string' && typeof v === 'string') {
+                memStore[n] = v;
+                return true;
+            }
         }
         return false;
     }
     function rls(n) {
-        return localStorage[n];
+        try {
+            return localStorage[n];
+        } catch (e) {
+            return memStore[n] || null;
+        }
     }
     function rc(n) {
         var nn, ca, i, c;
-        nn = n + '=';
-        ca = document.cookie.split(';');
-        for (i = 0; i < ca.length; i++) {
-            c = ca[i];
-            while (c.charAt(0) === ' ') {
-                c = c.substring(1, c.length);
+        try {
+            nn = n + '=';
+            ca = document.cookie.split(';');
+            for (i = 0; i < ca.length; i++) {
+                c = ca[i];
+                while (c.charAt(0) === ' ') {
+                    c = c.substring(1, c.length);
+                }
+                if (c.indexOf(nn) === 0) {
+                    return c.substring(nn.length, c.length);
+                }
             }
-            if (c.indexOf(nn) === 0) {
-                return c.substring(nn.length, c.length);
-            }
-        }
-        return null;
+        } catch (e) {}
+        return memStore[n] || null;
     }
     function dls(n) {
-        return delete localStorage[n];
+        try {
+            return delete localStorage[n];
+        } catch (e) {
+            delete memStore[n];
+            return true;
+        }
     }
     function dc(n) {
+        delete memStore[n];
         return wc(n, '', -1);
     }
     /**
@@ -416,6 +455,9 @@
     */
     //split string to array of strings with the same length
     function str_parts(str, length) {
+        if (!length || length <= 0 || !isFinite(length)) {
+            length = 80;
+        }
         var result = [];
         var len = str.length;
         if (len < length) {
@@ -568,7 +610,12 @@
             name += '_';
         }
         var data = $.Storage.get(name + 'commands');
-        data = data ? new Function('return ' + data + ';')() : [];
+        try {
+            data = data ? JSON.parse(data) : [];
+            if (!(data instanceof Array)) data = [];
+        } catch (e) {
+            data = [];
+        }
         var pos = data.length-1;
 
         $.extend(this, {
@@ -640,8 +687,8 @@
         if (options.width) {
             self.width(options.width);
         }
-        var num_chars; // calculates by draw_prompt
-        var prompt_len;
+        var num_chars = 80; // calculates by draw_prompt
+        var prompt_len = 0;
         var reverse_search = false;
         var reverse_search_string = '';
         var reverse_search_position = null;
@@ -698,9 +745,9 @@
         }
 
         function change_num_chars() {
-            var W = self.width();
-            var w = cursor.innerWidth();
-            num_chars = Math.floor(W / w);
+            var W = self.width() || 640;
+            var w = cursor.innerWidth() || 9;
+            num_chars = Math.max(30, Math.floor(W / w) || 80);
         }
         function str_repeat(str, n) {
             var result = '';
@@ -1458,39 +1505,7 @@
             return result;
         },
         split_equal_mprat: function(str, length){
-            var array = [];
-            if (str.length > length){
-                var linearray = str.split("\n");
-                for (var i = 0; i < linearray.length; i++){
-                    if (linearray[i].length < length){
-                        array.push(linearray[i]);
-                    } else {
-                        //line is too long - need to break it up
-                        var line_to_split = linearray[i];
-                        var wordarray = line_to_split.split(" ");
-                        
-                        while (wordarray.length > 0){
-                            var newline = "";    
-                            while (wordarray.length > 0 && newline.length + wordarray[0].length < length){
-                                newline += wordarray[0] + " ";
-                                wordarray.splice(0, 1);
-                            }
-                            array.push(newline);
-                        }
-                    }
-                }
-                // while (wordarray.length > 0){
-                //     var nextline = "";
-                //     while (nextline.length < wordarray[0].length && wordarray.length > 0) {
-                //         nextline += " " + wordarray[0];
-                //         wordarray.shift();
-                //     }
-                //     array.push(newline);
-                // }
-            } else {
-                array = [str];
-            }
-            return array;
+            return String(str).split("\n");
         },
         // encode formating as html for inserto into DOM
         encode: function(str) {
@@ -1775,16 +1790,15 @@
         //calculate numbers of characters
         function get_num_chars() {
             var cursor = self.find('.cursor');
-            var cur_width = cursor.width();
-            var result = Math.floor(self.width() / cur_width);
-            if (haveScrollbars()) {
-                // assume that scrollbars are 20px - in my Laptop with
-                // Linux/Chrome they are 16px
-                var margins = self.innerWidth() - self.width();
-                result -= Math.ceil((20 - margins / 2) / (cur_width-1));
+            var cur_width = cursor.width() || 9;
+            var term_width = self.width() || 640;
+            var result = Math.floor(term_width / cur_width);
+            if (haveScrollbars() && cur_width > 2) {
+                var margins = self.innerWidth() - term_width;
+                result -= Math.ceil((20 - margins / 2) / (cur_width - 1));
             }
 
-            return result;
+            return Math.max(30, result || 80);
         }
         function escape_brackets(string) {
             return string.replace(/\[/g, '&#91;').replace(/\]/g, '&#93;');
@@ -1847,13 +1861,8 @@
         function draw_line(string) {
             string = typeof string === 'string' ? string : String(string);
             var div, i, len;
-            if (string.length > num_chars || string.match(/\n/)) {
-                // string can have line break
-                // var array = string.split('\n');
-                // TODO: the way it should work
-                var array = $.terminal.split_equal_mprat(string, num_chars);
-                // var array = [string];
-
+            if (string.indexOf('\n') !== -1) {
+                var array = string.split('\n');
                 div = $('<div></div>');
                 for (i = 0, len = array.length; i < len; ++i) {
                     if (array[i] === '' || array[i] === '\r') {
@@ -2667,12 +2676,6 @@
                     var height = self.height();
                     num_chars = get_num_chars();
                     command_line.resize(num_chars);
-                    var o = output.detach();
-                    output.html('');
-                    $.each(lines, function(i, line) {
-                        draw_line(line && typeof line == 'function' ? line() : line);
-                    });
-                    self.prepend(o);
                     scroll_to_bottom();
                     if ($.type(settings.onResize) === 'function' &&
                         (old_height !== height || old_width !== width)) {
@@ -2819,17 +2822,7 @@
             }));
 
             // ---------------------------------------------------------------------
-            var on_scrollbar_show_resize = (function() {
-                var scrollBars = haveScrollbars();
-                return function() {
-                    if (scrollBars !== haveScrollbars()) {
-                        // if scollbars appearance change we will have different
-                        // number of chars
-                        self.resize();
-                        scrollBars = haveScrollbars();
-                    }
-                };
-            })();
+            var on_scrollbar_show_resize = $.noop;
 
             // ---------------------------------------------------------------------
             // INIT CODE

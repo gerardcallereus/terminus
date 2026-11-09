@@ -1224,17 +1224,17 @@ $(document).ready(function() {
     }, {
         prompt: 'ciberdefensa@institut:' + (fsModel.pwd() === fsModel.homePath ? '~' : fsModel.pwd()) + '$ ',
         greetings: (wasRestored ?
-            "========================================================================\n" +
-            "     🚨 CENTRE D'OPERACIONS DE CIBERDEFENSA 🚨                          \n" +
-            "========================================================================\n\n" +
+            "==============================================================\n" +
+            "     🚨 CENTRE D'OPERACIONS DE CIBERDEFENSA 🚨                \n" +
+            "==============================================================\n\n" +
             "[[;#00ffaa;]✔ SESSIÓ ANTERIOR RESTAURADA AMB ÈXIT!]\n" +
             "S'ha recuperat el teu progrés guardat (Pas " + GameProgress.step + "/17).\n" +
             "Pots continuar la missió exactament des del punt on la vas deixar!\n\n" +
-            "(Revisa el repte actual al panell dret, consulta el '📖 Tutorial' o escriu 'ajuda').\n"
+            "(Revisa el repte actual al panell superior, consulta el '📖 Tutorial' o escriu 'ajuda').\n"
             :
-            "========================================================================\n" +
-            "     🚨 CENTRE D'OPERACIONS DE CIBERDEFENSA 🚨                          \n" +
-            "========================================================================\n\n" +
+            "==============================================================\n" +
+            "     🚨 CENTRE D'OPERACIONS DE CIBERDEFENSA 🚨                \n" +
+            "==============================================================\n\n" +
             "Són les 17:30 h a l'institut. El servidor central del centre pateix un ciberatac crític\n" +
             "per part del grup de pirates informàtics «NullSector»:\n\n" +
             " • Han infectat el sistema amb un virus miner en segon pla que col·lapsa la CPU.\n" +
@@ -1255,14 +1255,6 @@ $(document).ready(function() {
         name: 'ciber_terminal',
         history: true
     });
-
-    // Habilitar desplaçament suau amb la roda del ratolí i el trackpad al terminal
-    var termElement = document.getElementById("term");
-    if (termElement) {
-        termElement.addEventListener("wheel", function(e) {
-            termElement.scrollTop += e.deltaY;
-        }, { passive: true });
-    }
 
     // Funció per mostrar el Minitutorial
     function showTutorialModal() {
